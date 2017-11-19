@@ -73,5 +73,6 @@ class ChickadeeServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 
 if __name__ == "__main__":
+	
 	server = ChickadeeServer(("localhost", 8127), RequestHandler)
 	server.serve_forever()
