@@ -1,6 +1,7 @@
 import mysql.connector as sql
 
 tables={}
+
 tables["feeders"] = (
 	"create table feeders ("
 		"feederID 			char(4) not null unique,"
@@ -55,10 +56,11 @@ tables["birds"] = (
 		"primary key(rfid)"
 	")"
 )
+
 tables["visits"] = (
 	"create table visits ("
-		"rfid 				varchar(16),"
-		"feederID 			char(4),"
+		"rfid 				varchar(16) not null,"
+		"feederID 			char(4) not null,"
 		"visitTimeStamp		datetime(0), "
 		"temp				int unsigned, "
 		"mass				int unsigned, "
@@ -70,8 +72,8 @@ tables["visits"] = (
 	")"
 )
 
-#uname = input("Enter username: ")
-#pswd = input("Enter password: ")
+uname = input("Enter username: ")
+pswd = input("Enter password: ")
 cnx = sql.connect(
 	user=uname,
 	password=pswd

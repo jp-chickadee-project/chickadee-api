@@ -1,3 +1,5 @@
 alldata
-oldata
+oldata/*
+olddata
+feeder_data.csv
 rfid_data.csv
