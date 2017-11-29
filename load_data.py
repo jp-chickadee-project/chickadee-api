@@ -2,21 +2,23 @@ import mysql.connector as sql
 import csv
 import os
 from itertools import islice
+from pprint import *
 
-rfid_data_path = "/home/michael/Documents/birdproject/chickadee-server/rfid_data.csv"
-feeder_data_path = "/home/michael/Documents/birdproject/chickadee-server/feeder_data.csv"
+rfid_data_path = os.getcwd() + "/rfid_data.csv"
+feeder_data_path = os.getcwd() + "/feeder_data.csv"
+visit_data_path = os.getcwd() + "/visit_data/"
 
 uname = input("Enter username: ")
 pswd = input("Enter password: ")
 cnx = sql.connect(
 	user=uname,
-	database='chickadeesTest',
+	database='chickadeesTesting',
 	password=pswd
 )
 
 
-cursor = cnx.cursor()
-
+cursor = cnx.cursor(buffered=True)
+cnx.get_warnings=True
 load_file = (
 	"load data local infile %s "
 	"into table visits fields terminated by ' ' "
@@ -38,20 +40,16 @@ load_birds = (
 	"(@varTimeStamp, "
 		"@varDate, "
 		"@varTime, "
-		"bander, "
+		"species, "
 		"capSite, "
 		"bandNum, "
 		"rfid, "
-		"bandCombo, "
-		"retrices, "
-		"wingChord, "
-		"tailLen, "
-		"birdWeight, "
-		"HY_AHY, "
 		"rightLegTop, "
 		"rightLegBottom, "
 		"leftLegTop, "
 		"leftLegBottom, "
+		"tailLen, "
+		"wingChord, "
 		"longestSec, "
 		"billDepth, "
 		"billWid, "
@@ -61,6 +59,7 @@ load_birds = (
 		"tarsus, "
 		"bagWeight, "
 		"bagAndBirdWeight, "
+		"birdWeight, "
 		"tissueSample, "
 		"suspectedSex, "
 		"@varEnter, "
@@ -68,7 +67,8 @@ load_birds = (
 		"@varReleased, "
 		"notes, "
 		"weather, "
-		"image"
+		"bander, "
+		"image "
 	") "
 	"set "
 		"fullTimeStamp = DATE_FORMAT(STR_TO_DATE(@varTimeStamp, '%m/%d/%Y %T'), '%Y-%m-%d %T'), "
@@ -94,7 +94,9 @@ print("Feeders loaded")
 cnx.commit()
 
 for f in os.listdir("olddata"):
-	cursor.execute(load_file, (os.getcwd() + "/olddata/" + f, f[:4]))
+	cursor.execute(load_file, (visit_data_path + f, f[:4]))
+	pprint(cursor.fetchwarnings())
+
 	print(f + " completed")
 print("Visits Loaded")
 

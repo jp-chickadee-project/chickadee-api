@@ -21,20 +21,16 @@ tables["birds"] = (
 		"fullTimeStamp 		datetime(0),"
 		"logDate 			date, "
 		"logTime 			time, "
-		"bander 			varchar(64), "
+		"species 			varchar(8), "
 		"capSite 			varchar(64), "
 		"bandNum			varchar(64), "
 		"rfid 				varchar(16) not null unique, "
-		"bandCombo			varchar(16), "
-		"retrices			varchar(8), "
-		"wingChord 			int unsigned, "
-		"tailLen			int unsigned, "
-		"birdWeight 		decimal(10,4) unsigned, "
-		"HY_AHY				int unsigned, "
 		"rightLegTop		varchar(64), "
 		"rightLegBottom		varchar(64), "
 		"leftLegTop			varchar(64), "
 		"leftLegBottom		varchar(64), "
+		"tailLen			int unsigned, "
+		"wingChord 			int unsigned, "
 		"longestSec			int unsigned, "
 		"billDepth			decimal(5,2) unsigned, "
 		"billWid			decimal(5,2) unsigned, "
@@ -44,6 +40,7 @@ tables["birds"] = (
 		"tarsus				decimal(5,2) unsigned, "
 		"bagWeight			decimal(10,4) unsigned, "
 		"bagAndBirdWeight	decimal(10,4) unsigned, "
+		"birdWeight 		decimal(10,4) unsigned, "
 		"tissueSample		varchar(32), "
 		"suspectedSex		varchar(16), "
 		"netEnter			time, "
@@ -51,6 +48,7 @@ tables["birds"] = (
 		"released			time, "
 		"notes				varchar(256), "
 		"weather			varchar(256), "
+		"bander 			varchar(64), "
 		"image				blob(300000),"
 
 		"primary key(rfid)"
@@ -65,9 +63,9 @@ tables["visits"] = (
 		"temp				int unsigned, "
 		"mass				int unsigned, "
 
-		"foreign key(rfid)"
-			"references birds(rfid),"
-		"foreign key(feederID)"
+		"foreign key(rfid) "
+			"references birds(rfid), "
+		"foreign key(feederID) "
 			"references feeders(feederID)"
 	")"
 )
@@ -79,23 +77,7 @@ cnx = sql.connect(
 	password=pswd
 )
 
-DB_NAME = "chickadeesTest"
-
-try:
-	cnx.database = DB_NAME  
-except sql.Error as err:
-	if err.errno == errorcode.ER_BAD_DB_ERROR:
-		try:
-			cursor.execute(
-				"CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
-		except mysql.connector.Error as err:
-			print("Failed creating database: {}".format(err))
-			exit(1)
-
-		cnx.database = DB_NAME
-	else:
-		print(err)
-		exit(1)
+cnx.database = "chickadeesTesting"
 cursor = cnx.cursor()
 
 
