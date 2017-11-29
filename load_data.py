@@ -93,7 +93,7 @@ cursor.execute(load_feeders)
 print("Feeders loaded")
 cnx.commit()
 
-for f in os.listdir("olddata"):
+for f in os.listdir("visit_data"):
 	cursor.execute(load_file, (visit_data_path + f, f[:4]))
 	pprint(cursor.fetchwarnings())
 
