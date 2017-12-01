@@ -25,9 +25,9 @@ load_file = (
 	"ignore 2 rows "
 	"(rfid, @varDate, @varTime) "
 	"set "
-		"visitTimeStamp = DATE_FORMAT(STR_TO_DATE(CONCAT_WS(' ',@varDate,@varTime), '%m/%d/%Y %T'), '%Y-%m-%d %T'), "
+		"visitTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT_WS(' ',@varDate,@varTime), '%m/%d/%Y %T')), "
 		"feederID = %s,"
-		"temp = 0,"
+		"temperature = 0,"
 		"mass = 0"
 )
 
@@ -37,25 +37,25 @@ load_birds = (
 	"optionally enclosed by '\"' " 
 	"lines terminated by '\r\n' "
 	"ignore 1 lines "
-	"(@varTimeStamp, "
+	"(@varLogTimestamp, "
 		"@varDate, "
 		"@varTime, "
 		"species, "
-		"capSite, "
-		"bandNum, "
+		"captureSite, "
+		"bandNumber, "
 		"rfid, "
 		"rightLegTop, "
 		"rightLegBottom, "
 		"leftLegTop, "
 		"leftLegBottom, "
-		"tailLen, "
+		"tailLength, "
 		"wingChord, "
-		"longestSec, "
+		"longestSecondary, "
 		"billDepth, "
-		"billWid, "
-		"billLen, "
-		"bibLen, "
-		"capLen, "
+		"billWidth, "
+		"billLength, "
+		"bibLength, "
+		"capLength, "
 		"tarsus, "
 		"bagWeight, "
 		"bagAndBirdWeight, "
@@ -67,16 +67,14 @@ load_birds = (
 		"@varReleased, "
 		"notes, "
 		"weather, "
-		"bander, "
-		"image "
+		"banders "
 	") "
 	"set "
-		"fullTimeStamp = DATE_FORMAT(STR_TO_DATE(@varTimeStamp, '%m/%d/%Y %T'), '%Y-%m-%d %T'), "
-		"logDate = DATE_FORMAT(STR_TO_DATE(@varDate, '%m/%d/%Y'), '%Y-%m-%d'), "
-		"logTime = TIME_FORMAT(STR_TO_DATE(@varTime, '%r'), '%T'), "
-		"netEnter = TIME_FORMAT(STR_TO_DATE(@varEnter, '%r'), '%T'), "
-		"netExit = TIME_FORMAT(STR_TO_DATE(@varExit, '%r'), '%T'), "
-		"released = TIME_FORMAT(STR_TO_DATE(@varReleased, '%r'), '%T')"
+		"logTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(@varLogTimestamp, '%m/%d/%Y %T')), "
+		"captureTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', @varTime), '%m/%d/%Y %T')), "
+		"netEnter = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varEnter, '%r'), '%T')), '%m/%d/%Y %T')), "
+		"netExit = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varExit, '%r'), '%T')), '%m/%d/%Y %T')), "
+		"released = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varReleased, '%r'), '%T')), '%m/%d/%Y %T')) "
 )
 
 load_feeders = (
@@ -88,6 +86,7 @@ load_feeders = (
 
 cursor.execute(load_birds)
 print("Birds loaded")
+cnx.commit()
 
 cursor.execute(load_feeders)
 print("Feeders loaded")
