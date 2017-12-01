@@ -35,8 +35,6 @@ class CustomJSONEncoder(JSONEncoder):
 
 app.json_encoder = CustomJSONEncoder
 
-
-
 @app.before_request
 def limit_remote_addr():
 	if request.remote_addr not in client_whitelist:
@@ -49,7 +47,7 @@ def birds():
 		cur.execute('''SELECT * FROM birds''')
 
 	data = [dict((cur.description[i][0], value)
-    	for i, value in enumerate(row)) for row in cur.fetchall()]
+		for i, value in enumerate(row)) for row in cur.fetchall()]
 
 	return jsonify(data)
 
