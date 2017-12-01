@@ -1,5 +1,3 @@
-alldata
-oldata/*
-olddata
-feeder_data.csv
-rfid_data.csv
+db_creation/visit_data/*
+db_creation/feeder_data.csv
+db_creation/rfid_data.csv
