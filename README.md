@@ -6,7 +6,7 @@ An api to interact with data for the JP chickadee project. `euclid.nmu.edu/api`
 
 # Interaction
 
-##Feeders
+## Feeders
 
 | Interaction   | Verb   | Endpoint                                                | Returns                                  |
 |---------------|--------|---------------------------------------------------------|------------------------------------------|
@@ -17,7 +17,7 @@ An api to interact with data for the JP chickadee project. `euclid.nmu.edu/api`
 | Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      |
 | Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates  |
 
-##Birds
+## Birds
 
 | Interaction   | Verb   | Endpoint                                                | Returns                                  |
 |---------------|--------|---------------------------------------------------------|------------------------------------------|
@@ -28,7 +28,7 @@ An api to interact with data for the JP chickadee project. `euclid.nmu.edu/api`
 | Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      |
 | Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates |
 
-##Visits
+## Visits
 
 | Interaction   | Verb   | Endpoint                                                | Returns                                  |
 |---------------|--------|---------------------------------------------------------|------------------------------------------|
