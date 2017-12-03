@@ -1,9 +1,9 @@
 import mysql.connector as sql
 import json
 
-tables={}
+tables=[]
 
-tables["feeders"] = (
+tables.append((
 	"create table feeders ("
 		"id 				char(4) not null unique,"
 		"fullName 			varchar(64) not null,"
@@ -16,8 +16,8 @@ tables["feeders"] = (
 
 		"primary key(id)"
 	")"
-)
-tables["birds"] = (
+))
+tables.append((
 	"create table birds ("
 		"logTimestamp		bigint unsigned,"
 		"captureTimestamp	bigint unsigned, "
@@ -53,9 +53,9 @@ tables["birds"] = (
 
 		"primary key(rfid)"
 	")"
-)
+))
 
-tables["visits"] = (
+tables.append((
 	"create table visits ("
 		"rfid 				varchar(16) not null,"
 		"feederID 			char(4) not null,"
@@ -68,7 +68,7 @@ tables["visits"] = (
 		"foreign key(feederID) "
 			"references feeders(id)"
 	")"
-)
+))
 
 config = json.load(open('../config', 'r'))
 
@@ -80,9 +80,8 @@ cnx = sql.connect(
 
 cursor = cnx.cursor()
 
-for name in tables:
-	print("Creating table: " + name)
-	cursor.execute(tables[name])
+for table in tables:
+	cursor.execute(table)
 
 cursor.close()
 cnx.close()
