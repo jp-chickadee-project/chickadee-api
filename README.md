@@ -1,7 +1,14 @@
 # JPCP Server API
 
-An api to interact with data for the JP chickadee project. `euclid.nmu.edu/api`
- will be the root directory. For the parameters, all dates are assumed to be in unix time format.
+An api to interact with data for the JP chickadee project. 
+
++ `euclid.nmu.edu:{port}/api` will be the root directory, where ports can be:
+	
+	+ `8155` - The production api, ideally running constantly and updated during downtime
+	
+	+ `8160` - The testing api, only running occasionally and updated frequently
+
+All date parameters are assumed to be in unix time format.
 
 
 # Interaction
@@ -42,9 +49,9 @@ Example data to demonstrate formatting
 ```
 {
 	"battery": 0, 
-	"feederID": "CLIF", 
+	"id": "CLIF", 
 	"fullName": "Cliff", 
-	"lastContact": 0, 
+	"lastContactTimestamp": 0, 
 	"lastPath": "", 
 	"lastStatus": "", 
 	"latitude": 46.5523000, 
@@ -54,37 +61,37 @@ Example data to demonstrate formatting
 ## Birds
 ```
 {
-	"bagAndBirdWeight": 22.5000, 
-	"bagWeight": 12.3000, 
-	"bandNumber": "2830-56001", 
+	"bagAndBirdWeight": 22.75, 
+	"bagWeight": 12.3, 
+	"bandNumber": "2830-56002", 
 	"banders": "Lindsay, Szarmach", 
-	"bibLength": 0.00, 
-	"billDepth": 3.50, 
-	"billLength": 10.30, 
-	"billWidth": 3.40, 
-	"birdWeight": 10.2000, 
-	"capLength": 0.00, 
+	"bibWidth": 22.5, 
+	"billDepth": 3.7, 
+	"billLength": 5.1, 
+	"billWidth": 3.5, 
+	"birdWeight": 10.45, 
+	"capLength": 32.5, 
 	"captureSite": "Carpenter Net", 
 	"captureTimestamp": 1507296600, 
 	"image": null, 
-	"leftLegBottom": "(#) - USFWS Number", 
-	"leftLegTop": "(Y) - YELLOW darvic", 
-	"logTimestamp": 1507579380, 
+	"legLeftBottom": "NONE", 
+	"legLeftTop": "(i0) - indigo no stripe RFID", 
+	"legRightBottom": "(#) - USFWS Number", 
+	"legRightTop": "(B) - BLACK darvic", 
+	"logTimestamp": 1507579560, 
 	"longestSecondary": 54, 
-	"netEnter": 1507262400, 
-	"netExit": 1507262400, 
-	"notes": "hallux 8.8", 
-	"released": 1507262400, 
-	"rfid": "011016A269", 
-	"rightLegBottom": "NONE", 
-	"rightLegTop": "(g0) - green no stripe RFID", 
-	"species": "RBNU", 
-	"suspectedSex": "female", 
-	"tailLength": 37, 
-	"tarsus": 16.50, 
+	"netEnterTimestamp": 1507262400, 
+	"netExitTimestamp": 1507262400, 
+	"notes": "molting R6, R6 photos taken", 
+	"releasedTimestamp": 1507262400, 
+	"rfid": "011016A4D4", 
+	"species": "BCCH", 
+	"suspectedSex": "unknown", 
+	"tailLength": 61, 
+	"tarsusLength": 17.7, 
 	"tissueSample": "feather", 
 	"weather": "Clear, 55F", 
-	"wingChord": 66
+	"wingChordLength": 63
 }
 ```
 ## Visits
