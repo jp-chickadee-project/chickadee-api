@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 import json
 import datetime
 from flask.json import JSONEncoder
+import decimal
 
 client_whitelist = [
 	'127.0.0.1',
@@ -21,16 +22,18 @@ with app.app_context():
 	mysql.init_app(app)
 
 class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        try:
-            if isinstance(obj, datetime.date) or isinstance(obj, datetime.timedelta) or isinstance(obj, datetime.datetime):
-                return str(obj)
-            iterable = iter(obj)
-        except TypeError:
-            pass
-        else:
-            return list(iterable)
-        return JSONEncoder.default(self, obj)
+	def default(self, obj):
+		try:
+			if isinstance(obj, datetime.date) or isinstance(obj, datetime.timedelta) or isinstance(obj, datetime.datetime):
+				return str(obj)
+			if isinstance(obj, decimal.Decimal):
+				return str(obj)
+			iterable = iter(obj)
+		except TypeError:
+			pass
+		else:
+			return list(iterable)
+		return JSONEncoder.default(self, obj)
 
 app.json_encoder = CustomJSONEncoder
 
@@ -45,11 +48,14 @@ def query(aQuery):
 
 
 
-
+"""
 @app.before_request
 def limit_remote_addr():
 	if request.remote_addr not in client_whitelist:
 		abort(403)
+"""
+
+
 
 @app.route("/api/birds/<rfid>", methods=['GET'])
 def birdsByID(rfid):
@@ -59,10 +65,17 @@ def birdsByID(rfid):
 def birds():
 	if request.method == 'GET':
 		rfid = request.args.get("rfid")
-		if not rfid == None:
+		if rfid:
 			return birdsByID(rfid)
 		return query('''SELECT * FROM birds''')
 
+
+
+
+
+@app.route("/api/feeders/<feederID>", methods=['GET'])
+def feedersByID(feederID):
+	return query("SELECT * FROM feeders WHERE feederID = '" + feederID + "' ;")
 
 @app.route("/api/feeders", methods=['GET', 'POST'])
 def feeders():
@@ -72,5 +85,5 @@ def feeders():
 
 
 if __name__ == "__main__":
-	app.run()
+	app.run(host="localhost", port=8155)
 
