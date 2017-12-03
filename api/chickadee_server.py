@@ -14,9 +14,9 @@ app = Flask(__name__)
 mysql = MySQL()
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = ''
-app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'chickadeesTesting'
+app.config['MYSQL_DATABASE_USER'] = input("Enter MySQL username: ")
+app.config['MYSQL_DATABASE_PASSWORD'] = input("Enter MySQL password: ")
+app.config['MYSQL_DB'] = input("Enter MySQL database: ")
 
 with app.app_context():
 	mysql.init_app(app)
@@ -85,5 +85,7 @@ def feeders():
 
 
 if __name__ == "__main__":
+	host = input("Enter host to run on: ")
+	port = input("Enter port: ")
 	app.run(host="localhost", port=8155)
 
