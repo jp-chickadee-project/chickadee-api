@@ -8,25 +8,25 @@ An api to interact with data for the JP chickadee project. `euclid.nmu.edu/api`
 
 ## Feeders
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  |
-|---------------|--------|---------------------------------------------------------|------------------------------------------|
-| All Feeders   | GET    | /api/feeders/                                           | List of all feeders                      |
-| Create Feeder | POST   | /api/feeders/                                           | The created feeder                       |
-| Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     |
-| Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       |
-| Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      |
-| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates  |
+| Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
+|---------------|--------|---------------------------------------------------------|------------------------------------------| -------------|
+| All Feeders   | GET    | /api/feeders/                                           | List of all feeders                      | Yes          |
+| Create Feeder | POST   | /api/feeders/                                           | The created feeder                       | No           |
+| Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     | Yes          |
+| Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       | No           |
+| Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      | No           |
+| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | No           |
 
 ## Birds
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  |
-|---------------|--------|---------------------------------------------------------|------------------------------------------|
-| All Birds     | GET    | /api/birds/                                             | List of all birds                        |
-| Create Bird   | POST   | /api/birds/                                             | The created bird                         |
-| Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       |
-| Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         |
-| Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      |
-| Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates |
+| Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
+|---------------|--------|---------------------------------------------------------|------------------------------------------| -------------|
+| All Birds     | GET    | /api/birds/                                             | List of all birds                        | Yes          |
+| Create Bird   | POST   | /api/birds/                                             | The created bird                         | No           |
+| Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       | Yes          |
+| Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         | No           |
+| Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      | No           |
+| Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates| No |
 
 ## Visits
 
