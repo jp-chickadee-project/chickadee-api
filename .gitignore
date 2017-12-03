@@ -1,3 +1,5 @@
 db_creation/visit_data/*
 db_creation/feeder_data.csv
 db_creation/rfid_data.csv
+
+api/config

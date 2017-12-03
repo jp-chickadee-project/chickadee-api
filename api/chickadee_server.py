@@ -4,22 +4,11 @@ import json
 import datetime
 from flask.json import JSONEncoder
 import decimal
+import sys
 
-client_whitelist = [
-	'127.0.0.1',
-	'198.110.204.9' #euclid
-]
-
-app = Flask(__name__)
+sys.stdout = open('apilog', 'w')
 mysql = MySQL()
-
-# MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = input("Enter MySQL username: ")
-app.config['MYSQL_DATABASE_PASSWORD'] = input("Enter MySQL password: ")
-app.config['MYSQL_DB'] = input("Enter MySQL database: ")
-
-with app.app_context():
-	mysql.init_app(app)
+app = Flask(__name__)
 
 class CustomJSONEncoder(JSONEncoder):
 	def default(self, obj):
@@ -35,8 +24,6 @@ class CustomJSONEncoder(JSONEncoder):
 			return list(iterable)
 		return JSONEncoder.default(self, obj)
 
-app.json_encoder = CustomJSONEncoder
-
 def query(aQuery):
 	cur = mysql.connection.cursor()
 	cur.execute(aQuery)
@@ -46,16 +33,12 @@ def query(aQuery):
 
 	return jsonify(data)
 
-
-
 """
 @app.before_request
 def limit_remote_addr():
 	if request.remote_addr not in client_whitelist:
 		abort(403)
 """
-
-
 
 @app.route("/api/birds/<rfid>", methods=['GET'])
 def birdsByID(rfid):
@@ -69,10 +52,6 @@ def birds():
 			return birdsByID(rfid)
 		return query('''SELECT * FROM birds''')
 
-
-
-
-
 @app.route("/api/feeders/<feederID>", methods=['GET'])
 def feedersByID(feederID):
 	return query("SELECT * FROM feeders WHERE feederID = '" + feederID + "' ;")
@@ -85,7 +64,16 @@ def feeders():
 
 
 if __name__ == "__main__":
-	host = input("Enter host to run on: ")
-	port = input("Enter port: ")
-	app.run(host="localhost", port=8155)
+	apiconfig = json.load(open('config', 'r'))
+	
+	app.json_encoder = CustomJSONEncoder
 
+	# MySQL configurations
+	app.config['MYSQL_DATABASE_USER'] = apiconfig["username"]
+	app.config['MYSQL_DATABASE_PASSWORD'] = apiconfig["password"]
+	app.config['MYSQL_DB'] = apiconfig["database"]
+
+	with app.app_context():
+		mysql.init_app(app)
+
+	app.run(host=apiconfig["host"], port=apiconfig["port"])
