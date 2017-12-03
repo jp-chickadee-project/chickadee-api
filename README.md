@@ -30,9 +30,9 @@ An api to interact with data for the JP chickadee project. `euclid.nmu.edu/api`
 
 ## Visits
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  |
-|---------------|--------|---------------------------------------------------------|------------------------------------------|
-| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    |
+| Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
+|---------------|--------|---------------------------------------------------------|------------------------------------------|--------------|
+| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    | No |
 
 # Data Templates
 
