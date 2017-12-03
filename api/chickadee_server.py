@@ -1,8 +1,9 @@
 from flask import Flask, request, abort, jsonify
+from flask.json import JSONEncoder
 from flask_mysqldb import MySQL
+
 import json
 import datetime
-from flask.json import JSONEncoder
 import decimal
 import sys
 
@@ -15,7 +16,7 @@ class CustomJSONEncoder(JSONEncoder):
 			if isinstance(obj, datetime.date) or isinstance(obj, datetime.timedelta) or isinstance(obj, datetime.datetime):
 				return str(obj)
 			if isinstance(obj, decimal.Decimal):
-				return str(obj)
+				return float(obj)
 			iterable = iter(obj)
 		except TypeError:
 			pass
