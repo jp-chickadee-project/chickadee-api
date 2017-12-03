@@ -8,17 +8,6 @@ rfid_data_path = os.getcwd() + "/rfid_data.csv"
 feeder_data_path = os.getcwd() + "/feeder_data.csv"
 visit_data_path = os.getcwd() + "/visit_data/"
 
-uname = input("Enter username: ")
-pswd = input("Enter password: ")
-cnx = sql.connect(
-	user=uname,
-	database='chickadeesTesting',
-	password=pswd
-)
-
-
-cursor = cnx.cursor(buffered=True)
-cnx.get_warnings=True
 load_file = (
 	"load data local infile %s "
 	"into table visits fields terminated by ' ' "
@@ -44,19 +33,19 @@ load_birds = (
 		"captureSite, "
 		"bandNumber, "
 		"rfid, "
-		"rightLegTop, "
-		"rightLegBottom, "
-		"leftLegTop, "
-		"leftLegBottom, "
+		"legRightTop, "
+		"legRightBottom, "
+		"legLeftTop, "
+		"legLeftBottom, "
 		"tailLength, "
-		"wingChord, "
+		"wingChordLength, "
 		"longestSecondary, "
 		"billDepth, "
 		"billWidth, "
 		"billLength, "
-		"bibLength, "
+		"bibWidth, "
 		"capLength, "
-		"tarsus, "
+		"tarsusLength, "
 		"bagWeight, "
 		"bagAndBirdWeight, "
 		"birdWeight, "
@@ -72,17 +61,29 @@ load_birds = (
 	"set "
 		"logTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(@varLogTimestamp, '%m/%d/%Y %T')), "
 		"captureTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', @varTime), '%m/%d/%Y %T')), "
-		"netEnter = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varEnter, '%r'), '%T')), '%m/%d/%Y %T')), "
-		"netExit = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varExit, '%r'), '%T')), '%m/%d/%Y %T')), "
-		"released = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varReleased, '%r'), '%T')), '%m/%d/%Y %T')) "
+		"netEnterTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varEnter, '%r'), '%T')), '%m/%d/%Y %T')), "
+		"netExitTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varExit, '%r'), '%T')), '%m/%d/%Y %T')), "
+		"releasedTimestamp = UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(@varDate, ' ', TIME_FORMAT(STR_TO_DATE(@varReleased, '%r'), '%T')), '%m/%d/%Y %T')) "
 )
 
 load_feeders = (
 	"load data local infile '" + feeder_data_path + "' "
 	"into table feeders fields terminated by ',' "
 	"ignore 1 rows "
-	"(feederID,fullName,lastPath,battery,latitude,longitude,lastStatus,lastContact) "
+	"(id,fullName,lastPath,battery,latitude,longitude,lastStatus,lastContactTimestamp) "
 )
+
+
+config = json.load(open('../config', 'r'))
+
+cnx = sql.connect(
+	user=config["username"],
+	password=config["password"],
+	database=config["database"]
+)
+
+cursor = cnx.cursor(buffered=True)
+cnx.get_warnings=True
 
 cursor.execute(load_birds)
 print("Birds loaded")

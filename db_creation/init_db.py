@@ -4,16 +4,16 @@ tables={}
 
 tables["feeders"] = (
 	"create table feeders ("
-		"feederID 			char(4) not null unique,"
+		"id 				char(4) not null unique,"
 		"fullName 			varchar(64) not null,"
 		"lastPath			varchar(16),"
 		"battery 			int unsigned,"
 		"latitude 			decimal(10,7),"
 		"longitude 			decimal(10,7),"
 		"lastStatus			varchar(64),"
-		"lastContact		bigint unsigned,"
+		"lastContactTimestamp bigint unsigned,"
 
-		"primary key(feederID)"
+		"primary key(id)"
 	")"
 )
 tables["birds"] = (
@@ -24,27 +24,27 @@ tables["birds"] = (
 		"captureSite		varchar(64), "
 		"bandNumber			varchar(64), "
 		"rfid 				varchar(16) not null unique, "
-		"rightLegTop		varchar(64), "
-		"rightLegBottom		varchar(64), "
-		"leftLegTop			varchar(64), "
-		"leftLegBottom		varchar(64), "
+		"legRightTop		varchar(64), "
+		"legRightBottom		varchar(64), "
+		"legLeftTop			varchar(64), "
+		"legLeftBottom		varchar(64), "
 		"tailLength			int unsigned, "
-		"wingChord 			int unsigned, "
+		"wingChordLength	int unsigned, "
 		"longestSecondary	int unsigned, "
 		"billDepth			decimal(5,2) unsigned, "
 		"billWidth			decimal(5,2) unsigned, "
 		"billLength			decimal(5,2) unsigned, "
-		"bibLength			decimal(5,2) unsigned, "
+		"bibWidth			decimal(5,2) unsigned, "
 		"capLength			decimal(5,2) unsigned, "
-		"tarsus				decimal(5,2) unsigned, "
+		"tarsusLength		decimal(5,2) unsigned, "
 		"bagWeight			decimal(10,4) unsigned, "
 		"bagAndBirdWeight	decimal(10,4) unsigned, "
 		"birdWeight 		decimal(10,4) unsigned, "
 		"tissueSample		varchar(32), "
 		"suspectedSex		varchar(16), "
-		"netEnter			bigint unsigned, "
-		"netExit			bigint unsigned, "
-		"released			bigint unsigned, "
+		"netEnterTimestamp	bigint unsigned, "
+		"netExitTimestamp	bigint unsigned, "
+		"releasedTimestamp	bigint unsigned, "
 		"notes				varchar(256), "
 		"weather			varchar(256), "
 		"banders 			varchar(64), "
@@ -65,20 +65,19 @@ tables["visits"] = (
 		"foreign key(rfid) "
 			"references birds(rfid), "
 		"foreign key(feederID) "
-			"references feeders(feederID)"
+			"references feeders(id)"
 	")"
 )
 
-uname = input("Enter username: ")
-pswd = input("Enter password: ")
+config = json.load(open('../config', 'r'))
+
 cnx = sql.connect(
-	user=uname,
-	password=pswd
+	user=config["username"],
+	password=config["password"],
+	database=config["database"]
 )
 
-cnx.database = "chickadeesTesting"
 cursor = cnx.cursor()
-
 
 for name in tables:
 	print("Creating table: " + name)

@@ -6,7 +6,6 @@ from flask.json import JSONEncoder
 import decimal
 import sys
 
-sys.stdout = open('apilog', 'w')
 mysql = MySQL()
 app = Flask(__name__)
 
@@ -31,6 +30,8 @@ def query(aQuery):
 	data = [dict((cur.description[i][0], value)
 		for i, value in enumerate(row)) for row in cur.fetchall()]
 
+	if len(data) == 1:
+		data = data[0]
 	return jsonify(data)
 
 """
@@ -64,7 +65,7 @@ def feeders():
 
 
 if __name__ == "__main__":
-	apiconfig = json.load(open('config', 'r'))
+	apiconfig = json.load(open('../config', 'r'))
 	
 	app.json_encoder = CustomJSONEncoder
 
