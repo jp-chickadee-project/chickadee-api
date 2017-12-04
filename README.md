@@ -22,7 +22,7 @@ All date parameters are assumed to be in unix time format.
 | Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     | Yes          |
 | Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       | No           |
 | Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      | No           |
-| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | No           |
+| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | yes          |
 
 ## Birds
 
@@ -33,13 +33,13 @@ All date parameters are assumed to be in unix time format.
 | Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       | Yes          |
 | Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         | No           |
 | Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      | No           |
-| Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates| No |
+| Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates| Yes |
 
 ## Visits
 
 | Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
 |---------------|--------|---------------------------------------------------------|------------------------------------------|--------------|
-| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    | No |
+| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    | Yes |
 
 # Data Templates
 
