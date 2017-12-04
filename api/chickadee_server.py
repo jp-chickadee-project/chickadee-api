@@ -44,6 +44,14 @@ def limit_remote_addr():
 
 @app.route("/api/birds/<rfid>", methods=['GET'])
 def birdsByID(rfid):
+	start = request.args.get("start")
+	end = request.args.get("end")
+
+	if start and end:
+		return query("SELECT * FROM visits "
+					"WHERE  visits.rfid = '" + rfid + "' " 
+					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
+
 	return query("SELECT * FROM birds WHERE rfid = '" + rfid + "' ;")
 
 @app.route("/api/birds/", methods=['GET', 'POST'])
@@ -52,16 +60,34 @@ def birds():
 		rfid = request.args.get("rfid")
 		if rfid:
 			return birdsByID(rfid)
-		return query('''SELECT * FROM birds''')
+		return query("SELECT * FROM birds")
 
 @app.route("/api/feeders/<feederID>", methods=['GET'])
 def feedersByID(feederID):
-	return query("SELECT * FROM feeders WHERE feederID = '" + feederID + "' ;")
+	start = request.args.get("start")
+	end = request.args.get("end")
+	if start and end:
+		return query("SELECT * FROM visits "
+					"WHERE  visits.feederID = '" + feederID + "' " 
+					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
+	else:
+		return query("SELECT * FROM feeders WHERE id = '" + feederID + "' ;")
 
 @app.route("/api/feeders", methods=['GET', 'POST'])
 def feeders():
 	if request.method == 'GET':
-		return query('''SELECT * FROM feeders''')
+		feederID = request.args.get("feederID")
+		if feederID:
+			return feedersByID(feederID)
+		return query("SELECT * FROM feeders")
+
+@app.route("/api/visits", methods=['GET', 'POST'])
+def visits():
+	if request.method == "GET":
+		start = request.args.get("start")
+		end = request.args.get("end")
+		return query("SELECT * FROM visits "
+					"WHERE visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
 
 
 
