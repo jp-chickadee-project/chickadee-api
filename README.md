@@ -22,7 +22,7 @@ All date parameters are assumed to be in unix time format.
 | Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     | Yes          |
 | Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       | No           |
 | Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      | No           |
-| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | yes          |
+| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | Yes          |
 
 ## Birds
 
