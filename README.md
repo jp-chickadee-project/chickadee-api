@@ -34,6 +34,7 @@ All date parameters are assumed to be in unix time format.
 | Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         | No           |
 | Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      | No           |
 | Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates| Yes |
+| Bird Options  | GET    | /api/birds/options                                      | List of bird options                     | Yes          |
 
 ## Visits
 
@@ -104,3 +105,42 @@ Example data to demonstrate formatting
 	"mass": 108
 }
 ```
+
+##Bird Options
+```
+{
+  "banders": [
+    "Richards", 
+    "Nate", 
+    "SJS", 
+    "James", 
+    "Selewski", 
+    "Dershem"
+  ], 
+  "captureSite": [
+    "Carpenter Net", 
+    "Cliffside Net", 
+    "Riley Net"
+  ], 
+  "legs": [
+    "(ap) - azure pink stripe RFID", 
+    "(w0) - white no stripe RFID", 
+    "(yp) - yellow pink stripe RFID"
+  ], 
+  "species": [
+    "RBNU", 
+    "BCCH", 
+    "WBNU"
+  ], 
+  "suspectedSex": [
+    "female", 
+    "unknown", 
+    "", 
+    "male"
+  ], 
+  "tissueSample": [
+    "feather", 
+    "none", 
+    "no"
+  ]
+}

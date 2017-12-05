@@ -2,6 +2,7 @@ from flask import Flask, request, abort, jsonify
 from flask.json import JSONEncoder
 from flask_mysqldb import MySQL
 
+from pprint import *
 import json
 import datetime
 import decimal
@@ -33,7 +34,7 @@ def query(aQuery):
 
 	if len(data) == 1:
 		data = data[0]
-	return jsonify(data)
+	return data
 
 """
 @app.before_request
@@ -48,11 +49,11 @@ def birdsByID(rfid):
 	end = request.args.get("end")
 
 	if start and end:
-		return query("SELECT * FROM visits "
+		return jsonify(query("SELECT * FROM visits "
 					"WHERE  visits.rfid = '" + rfid + "' " 
-					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
+					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";"))
 
-	return query("SELECT * FROM birds WHERE rfid = '" + rfid + "' ;")
+	return jsonify(query("SELECT * FROM birds WHERE rfid = '" + rfid + "' ;"))
 
 @app.route("/api/birds/", methods=['GET', 'POST'])
 def birds():
@@ -60,18 +61,59 @@ def birds():
 		rfid = request.args.get("rfid")
 		if rfid:
 			return birdsByID(rfid)
-		return query("SELECT * FROM birds")
+		return jsonify(query("SELECT * FROM birds"))
+
+@app.route("/api/birds/options", methods=['GET'])
+def birdOptions():
+	options = {
+		"species": query("SELECT DISTINCT species FROM birds;"),
+		"captureSite": query("SELECT DISTINCT captureSite FROM birds;"),
+		"tissueSample": query("SELECT DISTINCT tissueSample FROM birds;"),
+		"suspectedSex":	query("SELECT DISTINCT suspectedSex FROM birds;")
+	}
+
+	legs = {
+		"legLeftBottom": query("SELECT DISTINCT legLeftBottom FROM birds;"),
+		"legLeftTop": query("SELECT DISTINCT legLeftTop FROM birds;"),
+		"legRightBottom": query("SELECT DISTINCT legRightBottom FROM birds;"),
+		"legRightTop": query("SELECT DISTINCT legRightTop FROM birds;")
+	}
+	banders = query("SELECT DISTINCT banders FROM birds;")
+
+
+	for key in options:
+		options[key] = [options[key][x][key] for x in range(len(options[key]))]
+	for key in legs:
+		legs[key] = [legs[key][x][key] for x in range(len(legs[key]))]
+
+	options["legs"] = list(
+			set(legs["legLeftBottom"])	| 
+			set(legs["legLeftTop"]) 	| 
+			set(legs["legRightTop"])	| 
+			set(legs["legRightBottom"])
+		)
+
+	options["banders"] = [x["banders"] for x in banders]
+	temp = set()
+	for x in options["banders"]:
+		temp = temp | set(x.split(", "))
+	options["banders"] = list(temp)
+
+	pprint(options)
+
+	return jsonify(options)
+
 
 @app.route("/api/feeders/<feederID>", methods=['GET'])
 def feedersByID(feederID):
 	start = request.args.get("start")
 	end = request.args.get("end")
 	if start and end:
-		return query("SELECT * FROM visits "
+		return jsonify(query("SELECT * FROM visits "
 					"WHERE  visits.feederID = '" + feederID + "' " 
-					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
+					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";"))
 	else:
-		return query("SELECT * FROM feeders WHERE id = '" + feederID + "' ;")
+		return jsonify(query("SELECT * FROM feeders WHERE id = '" + feederID + "' ;"))
 
 @app.route("/api/feeders", methods=['GET', 'POST'])
 def feeders():
@@ -79,16 +121,15 @@ def feeders():
 		feederID = request.args.get("feederID")
 		if feederID:
 			return feedersByID(feederID)
-		return query("SELECT * FROM feeders")
+		return jsonify(query("SELECT * FROM feeders"))
 
 @app.route("/api/visits", methods=['GET', 'POST'])
 def visits():
 	if request.method == "GET":
 		start = request.args.get("start")
 		end = request.args.get("end")
-		return query("SELECT * FROM visits "
-					"WHERE visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
-
+		return jsonify(query("SELECT * FROM visits "
+					"WHERE visits.visitTimestamp BETWEEN " + start + " AND " + end + ";"))
 
 
 if __name__ == "__main__":
