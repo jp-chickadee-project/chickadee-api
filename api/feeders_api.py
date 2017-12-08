@@ -1,28 +1,21 @@
-from flask import Blueprint, render_template, abort, request, jsonify
-from extensions import query
+from flask import Blueprint, request
+from shared_funcs import *
 
 feeders = Blueprint('feeders', __name__, template_folder='templates')
-
 
 @feeders.route("/api/feeders/<feederID>", methods=['GET', 'PUT', 'DELETE'])
 def feedersByID(feederID):
 	if request.method == "GET":
 		start = request.args.get("start")
 		end = request.args.get("end")
+
 		if start and end:
-			return jsonify(query(
-				"SELECT * FROM visits \
-					WHERE feederID = '{0}' \
-					AND visitTimestamp BETWEEN {1} AND {2};".format(feederID, start, end)))
+			return queryVisitRange(start, end, field="feederID", key=feederID)
 		else:
-			return jsonify(query(
-				"SELECT * FROM feeders \
-					WHERE id = '{0}';".format(feederID)))
+			return queryRow("feeders", "id", feederID)
 
 	if request.method == "DELETE":
-		return jsonify(query(
-			"DELETE FROM feeders\
-				WHERE feederID = '{0}'"))
+		return queryDeleteOne("feeders", feederID)
 
 
 @feeders.route("/api/feeders", methods=['GET', 'POST'])
@@ -32,4 +25,4 @@ def feederCollection():
 		if feederID:
 			return feedersByID(feederID)
 		else:
-			return jsonify(query("SELECT * FROM feeders"))
+			return queryTable("feeders")

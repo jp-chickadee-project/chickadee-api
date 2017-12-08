@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, abort, request, jsonify
-from extensions import app, query
+from flask import Blueprint, request, jsonify
+from shared_funcs import *
 
 birds = Blueprint('birds', __name__, template_folder='templates')
 
@@ -10,11 +10,9 @@ def birdsByID(rfid):
 	end = request.args.get("end")
 
 	if start and end:
-		return jsonify(query("SELECT * FROM visits "
-					"WHERE  visits.rfid = '" + rfid + "' " 
-					"AND visits.visitTimestamp BETWEEN " + start + " AND " + end + ";"))
-
-	return jsonify(query("SELECT * FROM birds WHERE rfid = '" + rfid + "' ;"))
+		return queryVisitRange(start, end, field="rfid", key=rfid)
+	else:
+		return queryRow("birds", "rfid", rfid)
 
 @birds.route("/api/birds/", methods=['GET', 'POST'])
 def birdCollection():
@@ -22,7 +20,7 @@ def birdCollection():
 		rfid = request.args.get("rfid")
 		if rfid:
 			return birdsByID(rfid)
-		return jsonify(query("SELECT * FROM birds"))
+		return queryTable("birds")
 
 @birds.route("/api/birds/options", methods=['GET'])
 def birdOptions():

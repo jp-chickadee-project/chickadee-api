@@ -1,8 +1,4 @@
-from flask import Flask, request, abort, jsonify
-from flask.json import JSONEncoder
-from flask_mysqldb import MySQL
-
-from extensions import app, mysql, CustomJSONEncoder, query
+from shared_funcs import *
 from feeders_api import feeders
 from birds_api import birds
 from visits_api import visits

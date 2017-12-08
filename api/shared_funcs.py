@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_mysqldb import MySQL
 from flask.json import JSONEncoder
 
@@ -32,4 +32,23 @@ def query(aQuery):
 
 	if len(data) == 1:
 		data = data[0]
-	return data
+	return jsonify(data)
+
+def queryVisitRange(start, end, field="", key=""):
+	keyCondition = ""
+	if key:
+		keyCondition = "visits." + field + " = '" + key + "' AND "
+		
+	return query(
+		"SELECT * FROM " + "visits" + 
+			" WHERE " + keyCondition + 
+			"visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
+
+def queryRow(table, field, key):
+	return query("SELECT * FROM " + table + " WHERE " + field + " = '" + key + "';")
+
+def queryTable(table):
+	return query("SELECT * FROM " + table)
+
+def queryDeleteOne(table, field, key):
+	return query("DELETE FROM "+ table + " WHERE "+ field + " = " + feederID + ";")
