@@ -4,7 +4,7 @@ from shared_funcs import *
 birds = Blueprint('birds', __name__, template_folder='templates')
 
 
-@birds.route("/api/birds/<rfid>", methods=['GET'])
+@birds.route("/api/birds/<rfid>", methods=['GET', 'PUT', 'DELETE'])
 def birdsByID(rfid):
 	start = request.args.get("start")
 	end = request.args.get("end")
@@ -13,6 +13,9 @@ def birdsByID(rfid):
 		return queryVisitRange(start, end, field="rfid", key=rfid)
 	else:
 		return queryRow("birds", "rfid", rfid)
+
+	if request.method == "DELETE":
+		return queryDeleteOne("birds", "rfid", rfid)
 
 @birds.route("/api/birds/", methods=['GET', 'POST'])
 def birdCollection():

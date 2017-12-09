@@ -15,7 +15,7 @@ def feedersByID(feederID):
 			return queryRow("feeders", "id", feederID)
 
 	if request.method == "DELETE":
-		return queryDeleteOne("feeders", feederID)
+		return queryDeleteOne("feeders", "id", feederID)
 
 @feeders.route("/api/feeders", methods=['GET', 'POST'])
 def feederCollection():

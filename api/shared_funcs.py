@@ -58,5 +58,5 @@ def queryTable(table):
 	return query("SELECT * FROM " + table)
 
 def queryDeleteOne(table, field, key):
-	return query("DELETE FROM "+ table + " WHERE "+ field + " = " + feederID + ";")
+	return query("DELETE FROM "+ table + " WHERE "+ field + " = '" + key + "';")
 
