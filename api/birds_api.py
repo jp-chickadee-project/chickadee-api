@@ -22,6 +22,9 @@ def birdCollection():
 			return birdsByID(rfid)
 		return queryTable("birds")
 
+	if request.method == 'POST':
+		return queryAddRow("birds", request.form)
+
 @birds.route("/api/birds/options", methods=['GET'])
 def birdOptions():
 	options = {

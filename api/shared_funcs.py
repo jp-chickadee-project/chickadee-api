@@ -26,6 +26,7 @@ class CustomJSONEncoder(JSONEncoder):
 def query(aQuery):
 	cur = mysql.connection.cursor()
 	cur.execute(aQuery)
+	mysql.connection.commit()
 
 	data = [dict((cur.description[i][0], value)
 		for i, value in enumerate(row)) for row in cur.fetchall()]
@@ -47,8 +48,15 @@ def queryVisitRange(start, end, field="", key=""):
 def queryRow(table, field, key):
 	return query("SELECT * FROM " + table + " WHERE " + field + " = '" + key + "';")
 
+def queryAddRow(table, form):
+	fields = ", ".join([key for key in form.keys()])
+	values = "', '".join([val for val in form.values()])
+
+	return query("INSERT INTO " + table + " (" + fields + ") VALUES ('" + values + "');")
+
 def queryTable(table):
 	return query("SELECT * FROM " + table)
 
 def queryDeleteOne(table, field, key):
 	return query("DELETE FROM "+ table + " WHERE "+ field + " = " + feederID + ";")
+

@@ -17,7 +17,6 @@ def feedersByID(feederID):
 	if request.method == "DELETE":
 		return queryDeleteOne("feeders", feederID)
 
-
 @feeders.route("/api/feeders", methods=['GET', 'POST'])
 def feederCollection():
 	if request.method == 'GET':
@@ -26,3 +25,6 @@ def feederCollection():
 			return feedersByID(feederID)
 		else:
 			return queryTable("feeders")
+
+	if request.method == 'POST':
+		return queryAddRow("feeders", request.form)

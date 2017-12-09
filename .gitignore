@@ -3,5 +3,5 @@ db_creation/feeder_data.csv
 db_creation/rfid_data.csv
 
 api/__pycache__
-
+api/test_client.py
 config

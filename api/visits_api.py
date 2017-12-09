@@ -10,3 +10,6 @@ def visitCollection():
 		end = request.args.get("end")
 
 		return queryVisitRange(start, end)
+
+	if request.method == 'POST':
+		return queryAddRow("visits", request.form)
