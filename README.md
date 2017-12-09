@@ -18,7 +18,7 @@ All date parameters are assumed to be in unix time format.
 | Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
 |---------------|--------|---------------------------------------------------------|------------------------------------------| -------------|
 | All Feeders   | GET    | /api/feeders/                                           | List of all feeders                      | Yes          |
-| Create Feeder | POST   | /api/feeders/                                           | The created feeder                       | No           |
+| Create Feeder | POST   | /api/feeders/                                           | The created feeder                       | Yes           |
 | Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     | Yes          |
 | Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       | No           |
 | Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      | Yes          |
@@ -29,7 +29,7 @@ All date parameters are assumed to be in unix time format.
 | Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
 |---------------|--------|---------------------------------------------------------|------------------------------------------| -------------|
 | All Birds     | GET    | /api/birds/                                             | List of all birds                        | Yes          |
-| Create Bird   | POST   | /api/birds/                                             | The created bird                         | No           |
+| Create Bird   | POST   | /api/birds/                                             | The created bird                         | Yes           |
 | Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       | Yes          |
 | Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         | No           |
 | Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      | Yes          |
@@ -40,7 +40,9 @@ All date parameters are assumed to be in unix time format.
 
 | Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
 |---------------|--------|---------------------------------------------------------|------------------------------------------|--------------|
+| Add Visit     | POST    | /api/visits                				   | The created visit    		      | Yes |
 | Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    | Yes |
+
 
 # Data Templates
 
