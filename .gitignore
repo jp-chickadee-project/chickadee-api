@@ -1,7 +1,10 @@
-db_creation/visit_data/*
-db_creation/feeder_data.csv
-db_creation/rfid_data.csv
-
-api/__pycache__
-api/test_client.py
+__pycache__/*
 config
+
+views/__pycache__/*
+
+db/creation/visit_data/*
+db/creation/feeder_data.csv
+db/creation/rfid_data.csv
+db/__pycache__/*
+
