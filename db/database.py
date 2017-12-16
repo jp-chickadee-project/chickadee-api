@@ -1,4 +1,3 @@
-from flask import jsonify
 from flask_mysqldb import MySQL
 import MySQLdb
 
@@ -22,7 +21,7 @@ class chickadeeDatabase():
 
 		if len(data) == 1:
 			data = data[0]
-		return jsonify(data)
+		return data
 
 	def queryVisitRange(self, start, end, field="", key=""):
 		keyCondition = ""

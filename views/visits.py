@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app
+from flask import Blueprint, request, current_app, jsonify
 
 visits = Blueprint('visits', __name__)
 
@@ -10,7 +10,9 @@ def visitCollection():
 		start = request.args.get("start")
 		end = request.args.get("end")
 
-		return db.queryVisitRange(start, end)
+		response = db.queryVisitRange(start, end)
 
 	if request.method == 'POST':
-		return db.queryAddRow("visits", request.form)
+		response = db.queryAddRow("visits", request.form)
+
+	return jsonify(response)

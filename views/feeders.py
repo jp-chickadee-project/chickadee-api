@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app
+from flask import Blueprint, request, current_app, jsonify
 
 feeders = Blueprint('feeders', __name__)
 
@@ -11,19 +11,23 @@ def feedersByID(feederID):
 		end = request.args.get("end")
 
 		if start and end:
-			return db.queryVisitRange(start, end, field="feederID", key=feederID)
+			response = db.queryVisitRange(start, end, field="feederID", key=feederID)
 		else:
-			return db.queryRow("feeders", "id", feederID)
+			response = db.queryRow("feeders", "id", feederID)
 
 	if request.method == "DELETE":
-		return db.queryDeleteOne("feeders", "id", feederID)
+		response = db.queryDeleteOne("feeders", "id", feederID)
+
+	return jsonify(response)
 
 @feeders.route("/api/feeders", methods=['GET', 'POST'])
 def feederCollection():
 	db = current_app.config['DATABASE']
 
 	if request.method == 'GET':
-		return db.queryTable("feeders")
+		response = db.queryTable("feeders")
 
 	if request.method == 'POST':
-		return db.queryAddRow("feeders", request.form)
+		response = db.queryAddRow("feeders", request.form)
+
+	return jsonify(response)
