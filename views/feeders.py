@@ -15,8 +15,11 @@ def feedersByID(feederID):
 		else:
 			response = db.queryRow("feeders", "id", feederID)
 
+	if request.method == 'PUT':
+		response = db.queryUpdateRow("feeders", "id", feederID, request.form)
+
 	if request.method == "DELETE":
-		response = db.queryDeleteOne("feeders", "id", feederID)
+		response = db.queryDeleteRow("feeders", "id", feederID)
 
 	return jsonify(response)
 

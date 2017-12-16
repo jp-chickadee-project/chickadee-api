@@ -7,7 +7,6 @@ class chickadeeDatabase():
 
 
 	def query(self, aQuery):
-		print(aQuery)
 		cur = self.mysql.connection.cursor()
 
 		try:
@@ -42,8 +41,13 @@ class chickadeeDatabase():
 		values = "', '".join([val for val in form.values()])
 		return self.query("INSERT INTO %s (%s) VALUES ('%s');" % (table, fields, values))
 
+	def queryUpdateRow(self, table, field, key, form):
+		form = ", ".join(["%s = '%s'" % (x, form[x]) for x in form])
+
+		return self.query("UPDATE %s SET %s WHERE %s = '%s'" % (table, form, field, key))
+
 	def queryTable(self, table):
 		return self.query("SELECT * FROM %s;" % (table))
 
-	def queryDeleteOne(self, table, field, key):
+	def queryDeleteRow(self, table, field, key):
 		return self.query("DELETE FROM %s WHERE %s = '%s';" % (table, field, key))

@@ -16,7 +16,7 @@ def birdsByID(rfid):
 		response = db.queryRow("birds", "rfid", rfid)
 
 	if request.method == "DELETE":
-		response = db.queryDeleteOne("birds", "rfid", rfid)
+		response = db.queryDeleteRow("birds", "rfid", rfid)
 
 	return jsonify(response)
 
