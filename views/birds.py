@@ -6,21 +6,24 @@ birds = Blueprint('birds', __name__)
 @birds.route("/api/birds/<rfid>", methods=['GET', 'PUT', 'DELETE'])
 def birdsByID(rfid):
 	db = current_app.config['DATABASE']
+	if request.method == 'GET':
+		start = request.args.get("start")
+		end = request.args.get("end")
 
-	start = request.args.get("start")
-	end = request.args.get("end")
+		if start and end:
+			response = db.queryVisitRange(start, end, field="rfid", key=rfid)
+		else:
+			response = db.queryRow("birds", "rfid", rfid)
 
-	if start and end:
-		response = db.queryVisitRange(start, end, field="rfid", key=rfid)
-	else:
-		response = db.queryRow("birds", "rfid", rfid)
+	if request.method == 'PUT':
+		response = db.queryUpdateRow("birds", "rfid", rfid, request.form)
 
 	if request.method == "DELETE":
 		response = db.queryDeleteRow("birds", "rfid", rfid)
 
 	return jsonify(response)
 
-@birds.route("/api/birds/", methods=['GET', 'POST'])
+@birds.route("/api/birds", methods=['GET', 'POST'])
 def birdCollection():
 	db = current_app.config['DATABASE']
 
