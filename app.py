@@ -1,15 +1,33 @@
 from flask import Flask, request
 import flask.logging
+from flask.json import JSONEncoder
 
 from db.database import chickadeeDatabase
-
 from views.birds import birds
 from views.visits import visits
 from views.feeders import feeders
 
 import json
 import logging
+import traceback
+import datetime
+import decimal
 from time import strftime
+
+
+class CustomJSONEncoder(JSONEncoder):
+	def default(self, obj):
+		try:
+			if isinstance(obj, datetime.date) or isinstance(obj, datetime.timedelta) or isinstance(obj, datetime.datetime):
+				return str(obj)
+			if isinstance(obj, decimal.Decimal):
+				return float(obj)
+			iterable = iter(obj)
+		except TypeError:
+			pass
+		else:
+			return list(iterable)
+		return JSONEncoder.default(self, obj)
 
 app = Flask(__name__)
 
@@ -44,8 +62,9 @@ if __name__ == '__main__':
 	app.register_blueprint(visits)
 	app.register_blueprint(feeders)
 
+	app.json_encoder = CustomJSONEncoder
+	
 	logger = logging.getLogger(__name__)
-	test =
 	handler = logging.FileHandler('log')
 	handler.setLevel(logging.INFO)
 	logger.addHandler(handler)
