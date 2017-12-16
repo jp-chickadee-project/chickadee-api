@@ -14,7 +14,6 @@ import datetime
 import decimal
 from time import strftime
 
-
 class CustomJSONEncoder(JSONEncoder):
 	def default(self, obj):
 		try:
@@ -29,32 +28,28 @@ class CustomJSONEncoder(JSONEncoder):
 			return list(iterable)
 		return JSONEncoder.default(self, obj)
 
-app = Flask(__name__)
-
-@app.after_request
-def after_request(response):
-	if response.status_code != 500:
-		timestamp = strftime('[%Y-%b-%d %H:%M]')
-		logger.info('%s %s %s %s %s %s',
-			timestamp,
-			request.remote_addr,
-			request.method,
-			request.scheme,
-			request.full_path,
-			response.status)
-	return response
-
-@app.errorhandler(Exception)
-def exceptions(e):
-	timestamp = strftime('[%Y-%b-%d %H:%M]')
-	backtrace = traceback.format_exc()
-	logger.error('%s %s %s %s %s 5xx INTERNAL SERVER ERROR\n%s',
+def log(logger, request, message):
+	timestamp = strftime('[%Y-%b-%d %H:%M:%S]')
+	logger.info('%s %s %s %s %s %s',
 		timestamp,
 		request.remote_addr,
 		request.method,
 		request.scheme,
 		request.full_path,
-		backtrace)
+		message)
+
+app = Flask(__name__)
+
+@app.after_request
+def after_request(response):
+	if response.status_code != 500:
+		log(logger, request, response.status)
+	return response
+
+@app.errorhandler(Exception)
+def exceptions(e):
+	backtrace = "500 INTERNAL SERVER ERROR\n" + traceback.format_exc()
+	log(logger, request, backtrace)
 	return "Internal Server Error", 500
 
 if __name__ == '__main__':
@@ -63,7 +58,7 @@ if __name__ == '__main__':
 	app.register_blueprint(feeders)
 
 	app.json_encoder = CustomJSONEncoder
-	
+
 	logger = logging.getLogger(__name__)
 	handler = logging.FileHandler('log')
 	handler.setLevel(logging.INFO)
@@ -78,5 +73,11 @@ if __name__ == '__main__':
 
 	with app.app_context():
 		app.config['DATABASE'].mysql.init_app(app)
+
+	startupTime = strftime('[%Y-%b-%d %H:%M:%S]')
+	logger.info('%s Running on http://%s:%s/', 
+		startupTime,
+		apiconfig["host"],
+		apiconfig["port"])
 
 	app.run(apiconfig["host"], apiconfig["port"])

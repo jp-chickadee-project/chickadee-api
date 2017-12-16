@@ -7,6 +7,7 @@ class chickadeeDatabase():
 
 
 	def query(self, aQuery):
+		print(aQuery)
 		cur = self.mysql.connection.cursor()
 
 		try:
@@ -23,33 +24,26 @@ class chickadeeDatabase():
 			data = data[0]
 		return data
 
+
 	def queryVisitRange(self, start, end, field="", key=""):
 		keyCondition = ""
 		if key:
-			keyCondition = "visits." + field + " = '" + key + "' AND "
-			
+			keyCondition = "visits.%s = '%s' AND" % (field, key)
+
 		return self.query(
-			"SELECT * FROM " + "visits" + 
-				" WHERE " + keyCondition + 
-				"visits.visitTimestamp BETWEEN " + start + " AND " + end + ";")
+			"SELECT * FROM visits WHERE %s visitTimestamp BETWEEN %s AND %s;" %
+			(keyCondition, start, end))
 
 	def queryRow(self, table, field, key):
-		return self.query(
-			"SELECT * FROM " + table + 
-				" WHERE " + field + " = '" + key + "';")
+		return self.query("SELECT * FROM %s WHERE %s = '%s';" % (table, field, key))
 
 	def queryAddRow(self, table, form):
 		fields = ", ".join([key for key in form.keys()])
 		values = "', '".join([val for val in form.values()])
-		return self.query(
-			"INSERT INTO " + table + 
-				" (" + fields + ") VALUES ('" + values + "');")
+		return self.query("INSERT INTO %s (%s) VALUES ('%s');" % (table, fields, values))
 
 	def queryTable(self, table):
-		return self.query("SELECT * FROM " + table)
+		return self.query("SELECT * FROM %s;" % (table))
 
 	def queryDeleteOne(self, table, field, key):
-		return self.query(
-			"DELETE FROM "+ table + 
-				" WHERE "+ field + " = '" + key + "';")
-
+		return self.query("DELETE FROM %s WHERE %s = '%s';" % (table, field, key))
