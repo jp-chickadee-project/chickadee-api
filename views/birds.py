@@ -1,4 +1,5 @@
-from flask import Blueprint, request, current_app, g
+from flask import Blueprint, request, current_app, jsonify
+import json
 
 birds = Blueprint('birds', __name__)
 
@@ -31,20 +32,24 @@ def birdCollection():
 def birdOptions():
 	db = current_app.config['DATABASE']
 
+	def formatResponse(aQuery):
+		response = db.query(aQuery)
+		return json.loads(response.get_data())[:-1]
+
 	options = {
-		"species": db.query("SELECT DISTINCT species FROM birds;"),
-		"captureSite": db.query("SELECT DISTINCT captureSite FROM birds;"),
-		"tissueSample": db.query("SELECT DISTINCT tissueSample FROM birds;"),
-		"suspectedSex":	db.query("SELECT DISTINCT suspectedSex FROM birds;")
+		"species": formatResponse("SELECT DISTINCT species FROM birds;"),
+		"captureSite": formatResponse("SELECT DISTINCT captureSite FROM birds;"),
+		"tissueSample": formatResponse("SELECT DISTINCT tissueSample FROM birds;"),
+		"suspectedSex":	formatResponse("SELECT DISTINCT suspectedSex FROM birds;")
 	}
 
 	legs = {
-		"legLeftBottom": db.query("SELECT DISTINCT legLeftBottom FROM birds;"),
-		"legLeftTop": db.query("SELECT DISTINCT legLeftTop FROM birds;"),
-		"legRightBottom": db.query("SELECT DISTINCT legRightBottom FROM birds;"),
-		"legRightTop": db.query("SELECT DISTINCT legRightTop FROM birds;")
+		"legLeftBottom": formatResponse("SELECT DISTINCT legLeftBottom FROM birds;"),
+		"legLeftTop": formatResponse("SELECT DISTINCT legLeftTop FROM birds;"),
+		"legRightBottom": formatResponse("SELECT DISTINCT legRightBottom FROM birds;"),
+		"legRightTop": formatResponse("SELECT DISTINCT legRightTop FROM birds;")
 	}
-	banders = db.query("SELECT DISTINCT banders FROM birds;")
+	banders = formatResponse("SELECT DISTINCT banders FROM birds;")
 
 
 	for key in options:
@@ -62,7 +67,8 @@ def birdOptions():
 	options["banders"] = [x["banders"] for x in banders]
 	temp = set()
 	for x in options["banders"]:
-		temp = temp | set(x.split(", "))
+		if x:
+			temp = temp | set(x.split(", "))
 	options["banders"] = list(temp)
 
 	return jsonify(options)

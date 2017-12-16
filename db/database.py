@@ -22,7 +22,7 @@ class chickadeeDatabase():
 
 		if len(data) == 1:
 			data = data[0]
-		return jsonify(data), 200
+		return jsonify(data)
 
 	def queryVisitRange(self, start, end, field="", key=""):
 		keyCondition = ""
