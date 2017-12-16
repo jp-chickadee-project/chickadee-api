@@ -1,5 +1,6 @@
 from flask import jsonify
 from flask_mysqldb import MySQL
+import MySQLdb
 
 class chickadeeDatabase():
 	def __init__(self, app):
@@ -8,7 +9,12 @@ class chickadeeDatabase():
 
 	def query(self, aQuery):
 		cur = self.mysql.connection.cursor()
-		cur.execute(aQuery)
+
+		try:
+			cur.execute(aQuery)
+		except (MySQLdb.Error, MySQLdb.Warning) as e:
+			return str(e), 400
+
 		self.mysql.connection.commit()
 
 		data = [dict((cur.description[i][0], value)
@@ -16,7 +22,7 @@ class chickadeeDatabase():
 
 		if len(data) == 1:
 			data = data[0]
-		return jsonify(data)
+		return jsonify(data), 200
 
 	def queryVisitRange(self, start, end, field="", key=""):
 		keyCondition = ""
@@ -36,7 +42,6 @@ class chickadeeDatabase():
 	def queryAddRow(self, table, form):
 		fields = ", ".join([key for key in form.keys()])
 		values = "', '".join([val for val in form.values()])
-
 		return self.query(
 			"INSERT INTO " + table + 
 				" (" + fields + ") VALUES ('" + values + "');")
