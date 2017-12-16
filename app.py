@@ -16,7 +16,7 @@ app = Flask(__name__)
 @app.after_request
 def after_request(response):
 	if response.status_code != 500:
-		timestamp = strftime('[%Y-%b-%d %H:%M:%S]')
+		timestamp = strftime('[%Y-%b-%d %H:%M]')
 		logger.info('%s %s %s %s %s %s',
 			timestamp,
 			request.remote_addr,
@@ -29,12 +29,14 @@ def after_request(response):
 @app.errorhandler(Exception)
 def exceptions(e):
 	timestamp = strftime('[%Y-%b-%d %H:%M]')
-	logger.error('%s %s %s %s %s 500 INTERNAL SERVER ERROR',
+	backtrace = traceback.format_exc()
+	logger.error('%s %s %s %s %s 5xx INTERNAL SERVER ERROR\n%s',
 		timestamp,
 		request.remote_addr,
 		request.method,
 		request.scheme,
-		request.full_path)
+		request.full_path,
+		backtrace)
 	return "Internal Server Error", 500
 
 if __name__ == '__main__':
@@ -43,6 +45,7 @@ if __name__ == '__main__':
 	app.register_blueprint(feeders)
 
 	logger = logging.getLogger(__name__)
+	test =
 	handler = logging.FileHandler('log')
 	handler.setLevel(logging.INFO)
 	logger.addHandler(handler)
