@@ -9,3 +9,7 @@ db/creation/feeder_data.csv
 db/creation/rfid_data.csv
 db/__pycache__/*
 
+test/*
+
+setup.py
+__init__.py
