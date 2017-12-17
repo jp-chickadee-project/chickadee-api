@@ -40,6 +40,7 @@ def log(logger, request, message):
 
 app = Flask(__name__)
 
+
 @app.after_request
 def after_request(response):
 	if response.status_code != 500:
@@ -69,7 +70,7 @@ if __name__ == '__main__':
 	app.config['MYSQL_DATABASE_USER'] = apiconfig["username"]
 	app.config['MYSQL_DATABASE_PASSWORD'] = apiconfig["password"]
 	app.config['MYSQL_DB'] = apiconfig["database"]
-	app.config['DATABASE'] = chickadeeDatabase(app)
+	app.config['DATABASE'] = chickadeeDatabase()
 
 	with app.app_context():
 		app.config['DATABASE'].mysql.init_app(app)

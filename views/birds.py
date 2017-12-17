@@ -11,15 +11,15 @@ def birdsByID(rfid):
 		end = request.args.get("end")
 
 		if start and end:
-			response = db.queryVisitRange(start, end, field="rfid", key=rfid)
+			response = db.getVisitRange(start, end, field="rfid", key=rfid)
 		else:
-			response = db.queryRow("birds", "rfid", rfid)
+			response = db.getRow("birds", "rfid", rfid)
 
 	if request.method == 'PUT':
-		response = db.queryUpdateRow("birds", "rfid", rfid, request.form)
+		response = db.updateRow("birds", "rfid", rfid, request.form)
 
 	if request.method == "DELETE":
-		response = db.queryDeleteRow("birds", "rfid", rfid)
+		response = db.deleteRow("birds", "rfid", rfid)
 
 	return jsonify(response)
 
@@ -28,10 +28,10 @@ def birdCollection():
 	db = current_app.config['DATABASE']
 
 	if request.method == 'GET':
-		response = db.queryTable("birds")
+		response = db.getTable("birds")
 
 	if request.method == 'POST':
-		response = db.queryAddRow("birds", request.form)
+		response = db.createRow("birds", request.form)
 
 	return jsonify(response)
 
@@ -41,20 +41,19 @@ def birdOptions():
 	db = current_app.config['DATABASE']
 
 	options = {
-		"species": db.query("SELECT DISTINCT species FROM birds;")[:-1],
-		"captureSite": db.query("SELECT DISTINCT captureSite FROM birds;")[:-1],
-		"tissueSample": db.query("SELECT DISTINCT tissueSample FROM birds;")[:-1],
-		"suspectedSex":	db.query("SELECT DISTINCT suspectedSex FROM birds;")[:-1]
+		"species": db.getTable("birds", filters="DISTINCT species")[:-1],
+		"captureSite": db.getTable("birds", filters="DISTINCT captureSite")[:-1],
+		"tissueSample": db.getTable("birds", filters="DISTINCT tissueSample")[:-1],
+		"suspectedSex":	db.getTable("birds", filters="DISTINCT suspectedSex")[:-1],
 	}
 
 	legs = {
-		"legLeftBottom": db.query("SELECT DISTINCT legLeftBottom FROM birds;")[:-1],
-		"legLeftTop": db.query("SELECT DISTINCT legLeftTop FROM birds;")[:-1],
-		"legRightBottom": db.query("SELECT DISTINCT legRightBottom FROM birds;")[:-1],
-		"legRightTop": db.query("SELECT DISTINCT legRightTop FROM birds;")[:-1]
+		"legLeftBottom": db.getTable("birds", filters="DISTINCT legLeftBottom")[:-1],
+		"legLeftTop": db.getTable("birds", filters="DISTINCT legLeftTop")[:-1],
+		"legRightBottom": db.getTable("birds", filters="DISTINCT legRightBottom")[:-1],
+		"legRightTop": db.getTable("birds", filters="DISTINCT legRightTop")[:-1],
 	}
-	banders = db.query("SELECT DISTINCT banders FROM birds;")[:-1]
-
+	banders = db.getTable("birds", filters="DISTINCT banders")[:-1]
 
 	for key in options:
 		options[key] = [options[key][x][key] for x in range(len(options[key]))]

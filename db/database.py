@@ -2,9 +2,13 @@ from flask_mysqldb import MySQL
 import MySQLdb
 
 class chickadeeDatabase():
-	def __init__(self, app):
-		self.mysql = MySQL()
+	pri_keys = {
+		"birds": "rfid",
+		"feeders": "id",
+	}
 
+	def __init__(self):
+		self.mysql = MySQL()
 
 	def query(self, aQuery):
 		cur = self.mysql.connection.cursor()
@@ -23,31 +27,41 @@ class chickadeeDatabase():
 			data = data[0]
 		return data
 
+	def getTable(self, table, filters="*"):
+		return self.query(
+			"SELECT %s FROM %s;" 
+				% (filters, table))
 
-	def queryVisitRange(self, start, end, field="", key=""):
+	def getVisitRange(self, start, end, field="", key=""):
 		keyCondition = ""
 		if key:
-			keyCondition = "visits.%s = '%s' AND" % (field, key)
+			keyCondition = "AND %s = '%s'" % (field, key)
 
 		return self.query(
-			"SELECT * FROM visits WHERE %s visitTimestamp BETWEEN %s AND %s;" %
-			(keyCondition, start, end))
+			"SELECT * FROM visits WHERE visitTimestamp BETWEEN %s AND %s %s;"
+				% (start, end, keyCondition))
 
-	def queryRow(self, table, field, key):
-		return self.query("SELECT * FROM %s WHERE %s = '%s';" % (table, field, key))
+	def getRow(self, table, key):
+		return self.query(
+			"SELECT * FROM %s WHERE %s = '%s';" 
+				% (table, self.pri_keys[table], key))
 
-	def queryAddRow(self, table, form):
+	def createRow(self, table, form):
 		fields = ", ".join([key for key in form.keys()])
 		values = "', '".join([val for val in form.values()])
-		return self.query("INSERT INTO %s (%s) VALUES ('%s');" % (table, fields, values))
 
-	def queryUpdateRow(self, table, field, key, form):
+		return self.query(
+			"INSERT INTO %s (%s) VALUES ('%s');" 
+				% (table, fields, values))
+
+	def updateRow(self, table, key, form):
 		form = ", ".join(["%s = '%s'" % (x, form[x]) for x in form])
 
-		return self.query("UPDATE %s SET %s WHERE %s = '%s'" % (table, form, field, key))
+		return self.query(
+			"UPDATE %s SET %s WHERE %s = '%s'" 
+				% (table, form, self.pri_keys[table], key))
 
-	def queryTable(self, table):
-		return self.query("SELECT * FROM %s;" % (table))
-
-	def queryDeleteRow(self, table, field, key):
-		return self.query("DELETE FROM %s WHERE %s = '%s';" % (table, field, key))
+	def deleteRow(self, table, key):
+		return self.query(
+			"DELETE FROM %s WHERE %s = '%s';" 
+				% (table, self.pri_keys[table], key))

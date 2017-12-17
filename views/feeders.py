@@ -11,15 +11,15 @@ def feedersByID(feederID):
 		end = request.args.get("end")
 
 		if start and end:
-			response = db.queryVisitRange(start, end, field="feederID", key=feederID)
+			response = db.getVisitRange(start, end, field="feederID", key=feederID)
 		else:
-			response = db.queryRow("feeders", "id", feederID)
+			response = db.getRow("feeders", feederID)
 
 	if request.method == 'PUT':
-		response = db.queryUpdateRow("feeders", "id", feederID, request.form)
+		response = db.updateRow("feeders", feederID, request.form)
 
 	if request.method == "DELETE":
-		response = db.queryDeleteRow("feeders", "id", feederID)
+		response = db.deleteRow("feeders", feederID)
 
 	return jsonify(response)
 
@@ -28,9 +28,9 @@ def feederCollection():
 	db = current_app.config['DATABASE']
 
 	if request.method == 'GET':
-		response = db.queryTable("feeders")
+		response = db.getTable("feeders")
 
 	if request.method == 'POST':
-		response = db.queryAddRow("feeders", request.form)
+		response = db.createRow("feeders", request.form)
 
 	return jsonify(response)

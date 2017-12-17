@@ -108,7 +108,7 @@ Example data to demonstrate formatting
 }
 ```
 
-##Bird Options
+## Bird Options
 ```
 {
   "banders": [

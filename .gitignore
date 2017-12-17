@@ -1,4 +1,5 @@
 __pycache__/*
+__init__.py
 config
 log
 
@@ -11,5 +12,3 @@ db/__pycache__/*
 
 test/*
 
-setup.py
-__init__.py
