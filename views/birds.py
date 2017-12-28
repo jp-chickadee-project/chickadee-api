@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app, jsonify
+from flask import Blueprint, request, current_app, jsonify, Response
 import json
 
 birds = Blueprint('birds', __name__)
@@ -6,34 +6,46 @@ birds = Blueprint('birds', __name__)
 @birds.route("/api/birds/<rfid>", methods=['GET', 'PUT', 'DELETE'])
 def birdsByID(rfid):
 	db = current_app.config['DATABASE']
+
+	if db.getRow("birds", rfid) == []:
+		return Response(status=404);
+
 	if request.method == 'GET':
 		start = request.args.get("start")
 		end = request.args.get("end")
 
 		if start and end:
-			response = db.getVisitRange(start, end, field="rfid", key=rfid)
+			resp, code = jsonify(db.getVisitRange(start, end, field="rfid", key=rfid)), 200
 		else:
-			response = db.getRow("birds", "rfid", rfid)
+			resp, code = jsonify(db.getRow("birds", rfid)), 200
 
 	if request.method == 'PUT':
-		response = db.updateRow("birds", "rfid", rfid, request.form)
+		db.updateRow("birds", rfid, request.form)
+		resp, code = jsonify(db.getRow("birds", rfid)), 201
 
 	if request.method == "DELETE":
-		response = db.deleteRow("birds", "rfid", rfid)
+		resp, code = jsonify(db.deleteRow("birds", rfid)), 204
 
-	return jsonify(response)
+	resp.status_code = code
+	return resp
 
-@birds.route("/api/birds", methods=['GET', 'POST'])
+@birds.route("/api/birds/", methods=['GET', 'POST'])
 def birdCollection():
 	db = current_app.config['DATABASE']
 
 	if request.method == 'GET':
-		response = db.getTable("birds")
+		resp, code = jsonify(db.getTable("birds")), 200
 
 	if request.method == 'POST':
-		response = db.createRow("birds", request.form)
+		if request.form["rfid"]:
+			db.createRow("birds", request.form)
+			resp, code = jsonify(db.getRow("birds", request.form["rfid"])), 201
+		else:
+			resp, code = Response("rfid not supplied"), 400
 
-	return jsonify(response)
+
+	resp.status_code = code
+	return resp
 
 
 @birds.route("/api/birds/options", methods=['GET'])

@@ -6,31 +6,41 @@ feeders = Blueprint('feeders', __name__)
 def feedersByID(feederID):
 	db = current_app.config['DATABASE']
 
+	if db.getRow("feeders", feederID) == []:
+		return Response(status=404);
+
 	if request.method == "GET":
 		start = request.args.get("start")
 		end = request.args.get("end")
 
 		if start and end:
-			response = db.getVisitRange(start, end, field="feederID", key=feederID)
+			resp, code = jsonify(db.getVisitRange(start, end, field="feederID", key=feederID)), 200
 		else:
-			response = db.getRow("feeders", feederID)
+			resp, code = jsonify(db.getRow("feeders", feederID)), 200
 
 	if request.method == 'PUT':
-		response = db.updateRow("feeders", feederID, request.form)
+		db.updateRow("feeders", feederID, request.form)
+		resp, code = jsonify(db.getRow("feeders", feederID)), 201
 
 	if request.method == "DELETE":
-		response = db.deleteRow("feeders", feederID)
+		resp, code = jsonify(db.deleteRow("feeders", feederID)), 204
 
-	return jsonify(response)
+	resp.status_code = code
+	return resp
 
-@feeders.route("/api/feeders", methods=['GET', 'POST'])
+@feeders.route("/api/feeders/", methods=['GET', 'POST'])
 def feederCollection():
 	db = current_app.config['DATABASE']
 
 	if request.method == 'GET':
-		response = db.getTable("feeders")
+		resp, code = jsonify(db.getTable("feeders")), 200
 
 	if request.method == 'POST':
-		response = db.createRow("feeders", request.form)
+		if request.form["id"]:
+			db.createRow("feeders", request.form)
+			resp, code = jsonify(db.getRow("feeders", request.form["id"])), 201
+		else:
+			resp, code = Response("id not supplied"), 400
 
-	return jsonify(response)
+	resp.status_code = code
+	return resp

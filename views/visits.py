@@ -1,8 +1,8 @@
-from flask import Blueprint, request, current_app, jsonify
+from flask import Blueprint, request, current_app, jsonify, Response
 
 visits = Blueprint('visits', __name__)
 
-@visits.route("/api/visits", methods=['GET', 'POST'])
+@visits.route("/api/visits/", methods=['GET', 'POST'])
 def visitCollection():
 	db = current_app.config['DATABASE']
 
@@ -10,9 +10,18 @@ def visitCollection():
 		start = request.args.get("start")
 		end = request.args.get("end")
 
-		response = db.getVisitRange(start, end)
+		if start and end and int(start) < int(end):
+			resp, code = jsonify(db.getVisitRange(start, end)), 200
+		else:
+			resp, code = Response("Bad time-range specification"), 400
+
 
 	if request.method == 'POST':
-		response = db.createRow("visits", request.form)
+		if request.form["rfid"] and request.form["feederID"]:
+			db.createRow("visits", request.form)
+			resp, code = Response(request.form), 200
+		else:
+			resp, code = Response("Primary keys not supplied"), 400
 
-	return jsonify(response)
+	resp.status_code = code
+	return resp

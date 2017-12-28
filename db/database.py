@@ -15,8 +15,8 @@ class chickadeeDatabase():
 
 		try:
 			cur.execute(aQuery)
-		except (MySQLdb.Error, MySQLdb.Warning) as e:
-			return str(e), 400
+		except (MySQLdb.Error) as e:
+			return str(e)
 
 		self.mysql.connection.commit()
 
@@ -62,6 +62,7 @@ class chickadeeDatabase():
 				% (table, form, self.pri_keys[table], key))
 
 	def deleteRow(self, table, key):
-		return self.query(
+		self.query(
 			"DELETE FROM %s WHERE %s = '%s';" 
 				% (table, self.pri_keys[table], key))
+		return {}
