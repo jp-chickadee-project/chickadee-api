@@ -58,28 +58,19 @@ def birdOptions():
 		"tissueSample": db.getTable("birds", filters="DISTINCT tissueSample")[:-1],
 		"suspectedSex":	db.getTable("birds", filters="DISTINCT suspectedSex")[:-1],
 	}
-
-	legs = {
-		"legLeftBottom": db.getTable("birds", filters="DISTINCT legLeftBottom")[:-1],
-		"legLeftTop": db.getTable("birds", filters="DISTINCT legLeftTop")[:-1],
-		"legRightBottom": db.getTable("birds", filters="DISTINCT legRightBottom")[:-1],
-		"legRightTop": db.getTable("birds", filters="DISTINCT legRightTop")[:-1],
-	}
-	banders = db.getTable("birds", filters="DISTINCT banders")[:-1]
-
 	for key in options:
 		options[key] = [options[key][x][key] for x in range(len(options[key]))]
-	for key in legs:
-		legs[key] = [legs[key][x][key] for x in range(len(legs[key]))]
 
-	options["legs"] = list(
-			set(legs["legLeftBottom"])	| 
-			set(legs["legLeftTop"]) 	| 
-			set(legs["legRightTop"])	| 
-			set(legs["legRightBottom"])
-		)
+	bands = db.getTable("bands")[:-1]
+	temp = {}
+	for i, item in enumerate(bands):
+		temp[item["band"]] = item["description"]
 
+	options["bands"] = temp
+
+	banders = db.getTable("birds", filters="DISTINCT banders")[:-1]
 	options["banders"] = [x["banders"] for x in banders]
+
 	temp = set()
 	for x in options["banders"]:
 		if x:
