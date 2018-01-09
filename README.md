@@ -124,11 +124,16 @@ Example data to demonstrate formatting
     "Cliffside Net", 
     "Riley Net"
   ], 
-  "legs": [
-    "(ap) - azure pink stripe RFID", 
-    "(w0) - white no stripe RFID", 
-    "(yp) - yellow pink stripe RFID"
-  ], 
+  "bands": {
+    "#": "USFWS Number", 
+    "A": "AZURE darvic", 
+    "B": "BROWN darvic", 
+    "G": "GREEN darvic", 
+    "I": "INDIGO darvic",  
+    "a0": "azure no stripe RFID", 
+    "ab": "azure black stripe RFID", 
+    "ag": "azure green stripe RFID", 
+  }, 
   "species": [
     "RBNU", 
     "BCCH", 
