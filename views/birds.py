@@ -53,10 +53,10 @@ def birdOptions():
 	db = current_app.config['DATABASE']
 
 	options = {
-		"species": db.getTable("birds", filters="DISTINCT species")[:-1],
-		"captureSite": db.getTable("birds", filters="DISTINCT captureSite")[:-1],
-		"tissueSample": db.getTable("birds", filters="DISTINCT tissueSample")[:-1],
-		"suspectedSex":	db.getTable("birds", filters="DISTINCT suspectedSex")[:-1],
+		"species": db.getTable("birds", filters="DISTINCT species"),
+		"captureSite": db.getTable("birds", filters="DISTINCT captureSite"),
+		"tissueSample": db.getTable("birds", filters="DISTINCT tissueSample"),
+		"suspectedSex":	db.getTable("birds", filters="DISTINCT suspectedSex"),
 	}
 	for key in options:
 		options[key] = [options[key][x][key] for x in range(len(options[key]))]
@@ -68,7 +68,7 @@ def birdOptions():
 
 	options["bands"] = temp
 
-	banders = db.getTable("birds", filters="DISTINCT banders")[:-1]
+	banders = db.getTable("birds", filters="DISTINCT banders")
 	options["banders"] = [x["banders"] for x in banders]
 
 	temp = set()
