@@ -68,6 +68,7 @@ Example data to demonstrate formatting
 	"bagWeight": 12.3, 
 	"bandNumber": "2830-56002", 
 	"banders": "Lindsay, Szarmach", 
+	"bandCombo": "#a0/I"
 	"bibWidth": 22.5, 
 	"billDepth": 3.7, 
 	"billLength": 5.1, 
@@ -78,9 +79,9 @@ Example data to demonstrate formatting
 	"captureTimestamp": 1507296600, 
 	"image": null, 
 	"legLeftBottom": "NONE", 
-	"legLeftTop": "(i0) - indigo no stripe RFID", 
-	"legRightBottom": "(#) - USFWS Number", 
-	"legRightTop": "(B) - BLACK darvic", 
+	"legLeftTop": "i0", 
+	"legRightBottom": "#", 
+	"legRightTop": "B",
 	"logTimestamp": 1507579560, 
 	"longestSecondary": 54, 
 	"netEnterTimestamp": 1507262400, 
@@ -142,12 +143,10 @@ Example data to demonstrate formatting
   "suspectedSex": [
     "female", 
     "unknown", 
-    "", 
     "male"
   ], 
   "tissueSample": [
     "feather", 
-    "none", 
-    "no"
+    "none"
   ]
 }

@@ -1,4 +1,5 @@
 from flask import Blueprint, request, current_app, jsonify, Response
+from collections import defaultdict
 import json
 
 birds = Blueprint('birds', __name__)
@@ -8,7 +9,7 @@ def birdsByID(rfid):
 	db = current_app.config['DATABASE']
 
 	if db.getRow("birds", rfid) == []:
-		return Response(status=404);
+		return Response("404 - Specified rfid does not exist", status=404);
 
 	if request.method == 'GET':
 		start = request.args.get("start")
@@ -38,10 +39,20 @@ def birdCollection():
 
 	if request.method == 'POST':
 		if request.form["rfid"]:
-			db.createRow("birds", request.form)
-			resp, code = jsonify(db.getRow("birds", request.form["rfid"])), 201
+			form = defaultdict(lambda: "")
+			for key, value in request.form.items():
+				form[key] = value
+
+			form["bandCombo"] = "%s%s/%s%s" % (
+				form["legRightTop"], 
+				form["legRightBottom"], 
+				form["legLeftTop"], 
+				form["legLeftBottom"]
+			)
+			db.createRow("birds", form)
+			resp, code = jsonify(db.getRow("birds", form["rfid"])), 201
 		else:
-			resp, code = Response("rfid not supplied"), 400
+			resp, code = Response("rfid not supplied", status=400)
 
 
 	resp.status_code = code
