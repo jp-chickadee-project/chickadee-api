@@ -5,9 +5,7 @@ log
 
 views/__pycache__/*
 
-db/creation/visit_data/*
-db/creation/feeder_data.csv
-db/creation/rfid_data.csv
+db/data/
 db/__pycache__/*
 
 test/*
