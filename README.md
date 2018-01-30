@@ -15,6 +15,7 @@ All date parameters are assumed to be in unix time format.
 
 ## Feeders
 
+
 | Interaction   | Verb   | Endpoint                                                | Returns                                  | 
 |---------------|--------|---------------------------------------------------------|------------------------------------------| 
 | All Feeders   | GET    | /api/feeders                                            | List of all feeders                      |
@@ -42,7 +43,7 @@ All date parameters are assumed to be in unix time format.
 |---------------|--------|---------------------------------------------------------|------------------------------------------|
 | Add Visit     | POST   | /api/visits                				   			   | The created visit    		   		      |
 | Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    |
-
+| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}&rfid={rfid}&feederID={feederID}  | List of all visits within given dates, rfid and feederID optional | Yes |
 
 # Data Templates
 
