@@ -12,13 +12,7 @@ def birdsByID(rfid):
 		return Response("404 - Specified rfid does not exist", status=404);
 
 	if request.method == 'GET':
-		start = request.args.get("start")
-		end = request.args.get("end")
-
-		if start and end:
-			resp, code = jsonify(db.getVisitRange(start, end, field="rfid", key=rfid)), 200
-		else:
-			resp, code = jsonify(db.getRow("birds", rfid)), 200
+		resp, code = jsonify(db.getRow("birds", rfid)), 200
 
 	if request.method == 'PUT':
 		db.updateRow("birds", rfid, request.form)
