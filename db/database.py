@@ -32,10 +32,11 @@ class chickadeeDatabase():
 			"SELECT %s FROM %s;" 
 				% (filters, table))
 
-	def getVisitRange(self, start, end, field="", key=""):
+	def getVisitRange(self, start, end, keys={}):
 		keyCondition = ""
-		if key:
-			keyCondition = "AND %s = '%s'" % (field, key)
+		for field, key in keys.items():
+			if key:
+				keyCondition += " AND %s = '%s'" % (field, key)
 
 		return self.query(
 			"SELECT * FROM visits WHERE visitTimestamp BETWEEN %s AND %s %s;"

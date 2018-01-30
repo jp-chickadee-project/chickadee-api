@@ -66,12 +66,10 @@ def birdOptions():
 	for key in options:
 		options[key] = [options[key][x][key] for x in range(len(options[key]))]
 
-	bands = db.getTable("bands")[:-1]
-	temp = {}
+	bands = db.getTable("bands")
+	options["bands"] = {}
 	for i, item in enumerate(bands):
-		temp[item["band"]] = item["description"]
-
-	options["bands"] = temp
+		options["bands"][item["band"]] = item["description"]
 
 	banders = db.getTable("birds", filters="DISTINCT banders")
 	options["banders"] = [x["banders"] for x in banders]

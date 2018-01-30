@@ -10,13 +10,7 @@ def feedersByID(feederID):
 		return Response(status=404);
 
 	if request.method == "GET":
-		start = request.args.get("start")
-		end = request.args.get("end")
-
-		if start and end:
-			resp, code = jsonify(db.getVisitRange(start, end, field="feederID", key=feederID)), 200
-		else:
-			resp, code = jsonify(db.getRow("feeders", feederID)), 200
+		resp, code = jsonify(db.getRow("feeders", feederID)), 200
 
 	if request.method == 'PUT':
 		db.updateRow("feeders", feederID, request.form)

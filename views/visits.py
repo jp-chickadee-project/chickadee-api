@@ -11,10 +11,13 @@ def visitCollection():
 		end = request.args.get("end")
 
 		if start and end and int(start) < int(end):
-			resp, code = jsonify(db.getVisitRange(start, end)), 200
+			keys = {
+				"rfid": request.args.get("rfid"),
+				"feederID": request.args.get("feederID")
+			}
+			resp, code = jsonify(db.getVisitRange(start, end, keys)), 200
 		else:
 			resp, code = Response("Bad time-range specification"), 400
-
 
 	if request.method == 'POST':
 		if request.form["rfid"] and request.form["feederID"]:
