@@ -22,7 +22,6 @@ All date parameters are assumed to be in unix time format.
 | Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     | Yes          |
 | Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       | Yes           |
 | Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      | Yes          |
-| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | Yes          |
 
 ## Birds
 
@@ -33,7 +32,6 @@ All date parameters are assumed to be in unix time format.
 | Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       | Yes          |
 | Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         | Yes           |
 | Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      | Yes          |
-| Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates| Yes |
 | Bird Options  | GET    | /api/birds/options                                      | List of bird options                     | Yes          |
 
 ## Visits
@@ -41,7 +39,7 @@ All date parameters are assumed to be in unix time format.
 | Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
 |---------------|--------|---------------------------------------------------------|------------------------------------------|--------------|
 | Add Visit     | POST    | /api/visits                				   | The created visit    		      | Yes |
-| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    | Yes |
+| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}&rfid={rfid}&feederID={feederID}  | List of all visits within given dates, rfid and feederID optional | Yes |
 
 
 # Data Templates
