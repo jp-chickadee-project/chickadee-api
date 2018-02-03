@@ -5,15 +5,18 @@ users = Blueprint('users', __name__)
 @users.route("/api/users", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def usersByName():
 	db = current_app.config['DATABASE']
+	username, pwHash = "", ""
 
-	username = request.headers['username']
-	pwHash = request.headers['password']
-	print(username, pwHash)
-	return Response(username + pwHash, status=200)
+	try:
+		username = request.headers['username']
+	except KeyError as e:
+		return Response("username not provided", status=400)
+	try: 
+		pwHash = request.headers['password']
+	except KeyError as e:
+		pass
 
-	if not username:
-		return Response("Username not supplied", status=400)
-
+	username = "butt"
 	if request.method == "GET":
 		resp, code = jsonify(db.getRow("users", username)), 200
 

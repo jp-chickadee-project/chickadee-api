@@ -5,6 +5,7 @@ class chickadeeDatabase():
 	pri_keys = {
 		"birds": "rfid",
 		"feeders": "id",
+		"users": "username"
 	}
 
 	def __init__(self):

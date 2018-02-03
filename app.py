@@ -83,4 +83,4 @@ if __name__ == '__main__':
 		apiconfig["host"],
 		apiconfig["port"])
 
-	app.run(apiconfig["host"], apiconfig["port"])
+	app.run(apiconfig["host"], apiconfig["port"], ssl_context=context)
