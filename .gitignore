@@ -10,3 +10,8 @@ db/__pycache__/*
 
 test/*
 
+bin
+include
+pip-selfcheck.json
+https
+lib
