@@ -13,7 +13,7 @@ class chickadeeDatabase():
 
 	def query(self, aQuery):
 		cur = self.mysql.connection.cursor()
-
+		print(aQuery)
 		try:
 			cur.execute(aQuery)
 		except (MySQLdb.Error) as e:
@@ -33,20 +33,10 @@ class chickadeeDatabase():
 			"SELECT %s FROM %s;" 
 				% (filters, table))
 
-	def getVisitRange(self, start, end, keys={}):
-		keyCondition = ""
-		for field, key in keys.items():
-			if key:
-				keyCondition += " AND %s = '%s'" % (field, key)
-
-		return self.query(
-			"SELECT * FROM visits WHERE visitTimestamp BETWEEN %s AND %s %s;"
-				% (start, end, keyCondition))
-
 	def getRow(self, table, key):
 		return self.query(
 			"SELECT * FROM %s WHERE %s = '%s';" 
-				% (table, self.pri_keys[table], key))
+				% (table, self.pri_keys[table], key, constraints))
 
 	def createRow(self, table, form):
 		fields = ", ".join([key for key in form.keys()])
