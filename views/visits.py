@@ -2,8 +2,10 @@ from flask import Blueprint, request, current_app, jsonify, Response
 
 visits = Blueprint('visits', __name__)
 
+#This is a messy, but I can't think of a cleaner way at the moment.
+#Ideally all SQL syntax here would be abstracted to the ChickadeeDatabase class
 @visits.route("/api/visits/", methods=['GET'])
-def getVisits():
+def getVisits(limit=None):
 	db = current_app.config['DATABASE']
 
 	start = request.args.get("start")
@@ -17,7 +19,7 @@ def getVisits():
 		constraints.append("rfid = '%s'" % (rfid))
 	if feederID:
 		constraints.append("feederID = '%s'" % (feederID))
-	if start and end:
+	if start and end and not limit:
 		if int(start) > int(end):
 			return Response("Bad time-range specification", status=400)
 		constraints.append("visitTimestamp BETWEEN %s AND %s" % (start, end))
@@ -25,8 +27,11 @@ def getVisits():
 	query = "SELECT * FROM visits "
 	if constraints:
 		query += "WHERE " + " AND ".join(constraints)
+	query += " ORDER BY visitTimeStamp DESC "
+	if limit:
+		query += " LIMIT %s" % (limit)
 
-	return jsonify(db.query(query + " ORDER BY visitTimeStamp DESC;")), 200
+	return jsonify(db.query(query + ";")), 200
 
 @visits.route("/api/visits/", methods=['POST'])
 def addVisit():
@@ -40,22 +45,5 @@ def addVisit():
 
 @visits.route("/api/visits/latest", methods=['GET'])
 def getLatestVisits():
-	db = current_app.config['DATABASE']
-
-	rfid = request.args.get("rfid")
-	feederID = request.args.get("feederID")
-	limit = request.args.get("limit") if request.args.get("limit") else 10
-
-	constraints = []
-
-	if rfid:
-		constraints.append("rfid = '%s'" % (rfid))
-	if feederID:
-		constraints.append("feederID = '%s'" % (feederID))
-
-	query = "SELECT * FROM visits "
-	if constraints:
-		query += "WHERE " + " AND ".join(constraints)
-	query += " ORDER BY visitTimeStamp DESC LIMIT %s;" % (limit)
-
-	return jsonify(db.query(query)), 200
+	limit = request.args.get("limit")
+	return getVisits(limit if limit else 10)
