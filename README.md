@@ -37,10 +37,11 @@ All date parameters are assumed to be in unix time format.
 
 ## Visits
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  |
-|---------------|--------|---------------------------------------------------------|------------------------------------------|
-| Add Visit     | POST   | /api/visits                				   			   | The created visit    		   		      |
-| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}&rfid={rfid}&feederID={feederID}  | List of all visits within given dates, rfid and feederID optional |
+| Interaction   | Verb   | Endpoint | Returns | Parameters |
+|---------------|--------|--------------------|--------------------------------|------------------------------|
+| Add Visit     | POST   | /api/visits        | The created visit              |                              |
+| Visit Range   | GET    | /api/visits        | List of matching visits        | rfid, feederID, start, end   |
+| Latest Visits | GET    | /api/visits/latest | List of matching latest visits | rfid, feederID, limit        |
 
 # Data Templates
 
