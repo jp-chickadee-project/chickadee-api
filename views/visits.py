@@ -1,4 +1,6 @@
 from flask import Blueprint, request, current_app, jsonify, Response
+from copy import copy
+from collections import defaultdict
 
 visits = Blueprint('visits', __name__)
 
@@ -37,11 +39,18 @@ def getVisits(limit=None):
 def addVisit():
 	db = current_app.config['DATABASE']
 
-	if request.form["rfid"] and request.form["feederID"]:
-		db.createRow("visits", request.form)
-		return Response(request.form, status=200)
+	if not (request.form["rfid"] and request.form["feederID"]):
+		return Response("Primary keys not properly supplied", status=400)
 
-	return Response("Primary keys not properly supplied", status=400)
+	form = defaultdict(lambda: "")
+	for key, value in request.form.items():
+		form[key] = value
+	correspondingBird = db.getRow("birds", form["rfid"])
+
+	form["bandCombo"] = correspondingBird["bandCombo"]
+	db.createRow("visits", form)
+
+	return Response(form, status=200)
 
 @visits.route("/api/visits/latest", methods=['GET'])
 def getLatestVisits():

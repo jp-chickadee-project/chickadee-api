@@ -36,7 +36,7 @@ class chickadeeDatabase():
 	def getRow(self, table, key):
 		return self.query(
 			"SELECT * FROM %s WHERE %s = '%s';" 
-				% (table, self.pri_keys[table], key, constraints))
+				% (table, self.pri_keys[table], key))
 
 	def createRow(self, table, form):
 		fields = ", ".join([key for key in form.keys()])
