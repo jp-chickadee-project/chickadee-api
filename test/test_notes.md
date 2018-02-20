@@ -6,8 +6,8 @@
 | GET Many	| Yes 	| Yes 	   |
 | GET One	| Yes 	| Yes 	   |
 | POST 		| Yes 	| Yes 	   |
-| PUT 		| No 	| No 	   |
-| DELETE 	| No 	| No 	   |
+| PUT 		| Yes 	| Yes 	   |
+| DELETE 	| Yes 	| Yes 	   |
 | Options 	| Yes 	| Yes 	   |
 
 ### Feeders

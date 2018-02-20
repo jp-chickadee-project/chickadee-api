@@ -28,13 +28,11 @@ class TestBirds(ChickadeeTester):
 	def testGetOne(self):
 		response = self.app.get('/api/birds/011016A269')
 		self.assertEqual(response.status_code, 200)
-		self.assertTrue(response.data)
 		response = json.loads(response.data)
 		self.assertEqual(response['rfid'], "011016A269")
 
 		response = self.app.get('/api/birds/nonsense')
 		self.assertEqual(response.status_code, 404)
-		self.assertTrue(response.data)
 		self.assertEqual(response.data.decode(), "404 - Specified rfid does not exist")
 
 	def testGetOptions(self):
@@ -106,7 +104,15 @@ class TestBirds(ChickadeeTester):
 		self.assertEqual(response.data.decode(), 'rfid not supplied')
 
 	def testDelete(self):
-		pass
+		self.app.post('/api/birds/', data=self.testbird)
+
+		response = self.app.delete('/api/birds/TESTBIRD')
+		self.assertEqual(response.status_code, 204)
+		self.assertEqual(response.data.decode(), '')
+
+		response = self.app.get('/api/birds/TESTBIRD')
+		self.assertEqual(response.status_code, 404)
+		self.assertEqual(response.data.decode(), "404 - Specified rfid does not exist")
 
 	def tearDown(self):
 		self.app.delete('/api/birds/TESTBIRD')
