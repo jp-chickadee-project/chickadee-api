@@ -31,7 +31,7 @@ class TestBirds(ChickadeeTester):
 	def testGetOne(self):
 		response = self.app.get('/api/birds/011016A269')
 		self.assertEqual(response.status_code, 200)
-		response = json.loads(response.data.decode().decode())
+		response = json.loads(response.data.decode())
 		self.assertEqual(response['rfid'], "011016A269")
 
 		response = self.app.get('/api/birds/nonsense')
