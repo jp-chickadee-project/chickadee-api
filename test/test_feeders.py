@@ -26,7 +26,7 @@ class TestFeeders(ChickadeeTester):
 		response = self.app.get('/api/feeders/')
 		self.assertEqual(response.status_code, 200)
 		self.assertTrue(response.data)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 
 		self.assertTrue(response[0]['id'])
 		self.assertTrue(response[0]['fullName'])
@@ -34,7 +34,7 @@ class TestFeeders(ChickadeeTester):
 	def testGetOne(self):
 		response = self.app.get('/api/feeders/CARP')
 		self.assertEqual(response.status_code, 200)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 		self.assertEqual(response['id'], "CARP")
 
 		response = self.app.get('/api/feeders/nonsense')
@@ -46,7 +46,7 @@ class TestFeeders(ChickadeeTester):
 
 		self.assertEqual(response.status_code, 201)
 		self.assertTrue(response.data)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 
 		for key in self.testFeeder:
 			self.assertEqual(self.testFeeder[key], response[key])
@@ -67,7 +67,7 @@ class TestFeeders(ChickadeeTester):
 		response = self.app.put('/api/feeders/TEST', data=temp)
 
 		self.assertEqual(response.status_code, 201)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 
 		for key in temp:
 			self.assertEqual(temp[key], response[key])

@@ -23,7 +23,7 @@ class TestBirds(ChickadeeTester):
 		response = self.app.get('/api/birds/')
 		self.assertEqual(response.status_code, 200)
 		self.assertTrue(response.data)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 
 		self.assertTrue(response[0]['rfid'])
 		self.assertTrue(response[0]['bandCombo'])
@@ -31,7 +31,7 @@ class TestBirds(ChickadeeTester):
 	def testGetOne(self):
 		response = self.app.get('/api/birds/011016A269')
 		self.assertEqual(response.status_code, 200)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode().decode())
 		self.assertEqual(response['rfid'], "011016A269")
 
 		response = self.app.get('/api/birds/nonsense')
@@ -43,7 +43,7 @@ class TestBirds(ChickadeeTester):
 		self.assertEqual(response.status_code, 200)
 		self.assertTrue(response.data)
 
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 		self.assertTrue('James' in response['banders'])
 		self.assertTrue('Dershem' in response['banders'])
 		self.assertTrue('Bertucci' in response['banders'])
@@ -59,16 +59,22 @@ class TestBirds(ChickadeeTester):
 		self.assertTrue('Riley Net' in response['captureSite'])
 		self.assertTrue('Sproull Net' in response['captureSite'])
 
-		self.assertEqual(response['species'], ['RBNU', 'BCCH', 'WBNU', None])
-		self.assertEqual(response['suspectedSex'], ['female', 'unknown', '', 'male', None])
-		self.assertEqual(response['tissueSample'], ['feather', 'none', 'no', None])
+		self.assertTrue('RBNU' in response['species'])
+		self.assertTrue('BCCH' in response['species'])
+		self.assertTrue('WBNU' in response['species'])
+
+		self.assertTrue('female' in response['species'])
+		self.assertTrue('male' in response['species'])
+		self.assertTrue('unknown' in response['species'])
+
+		self.assertTrue('feather' in response['tissueSample'])
 
 	def testPost(self):
 		response = self.app.post('/api/birds/', data=self.testbird)
 
 		self.assertEqual(response.status_code, 201)
 		self.assertTrue(response.data)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 
 		for key in self.testbird:
 			self.assertEqual(self.testbird[key], response[key])
@@ -94,7 +100,7 @@ class TestBirds(ChickadeeTester):
 
 		self.assertEqual(response.status_code, 201)
 		self.assertTrue(response.data)
-		response = json.loads(response.data)
+		response = json.loads(response.data.decode())
 
 		for key in temp:
 			self.assertEqual(temp[key], response[key])
