@@ -5,6 +5,17 @@ from pprint import pprint
 from chickadee_tester import ChickadeeTester
 
 class TestBirds(ChickadeeTester):
+	def setUp(self):
+		super(TestBirds, self).setUp()
+
+		self.testbird = {
+			"rfid": "TESTBIRD",
+			"bandCombo": "#v/v0",
+			"species": "RBNU", 
+			"suspectedSex": "female", 
+			"tailLength": 37
+		}
+
 	def testGetAll(self):
 		response = self.app.get('/api/birds/')
 		self.assertEqual(response.status_code, 200)
@@ -51,35 +62,49 @@ class TestBirds(ChickadeeTester):
 		self.assertEqual(response['suspectedSex'], ['female', 'unknown', '', 'male', None])
 		self.assertEqual(response['tissueSample'], ['feather', 'none', 'no', None])
 
-
 	def testPost(self):
-		testbird = {
-				"rfid": "TESTBIRD",
-				"bandCombo": "#v/v0",
-				"species": "RBNU", 
-				"suspectedSex": "female", 
-				"tailLength": 37
-		}
-		response = self.app.post('/api/birds/', data=testbird)
+		response = self.app.post('/api/birds/', data=self.testbird)
 
 		self.assertEqual(response.status_code, 201)
 		self.assertTrue(response.data)
 		response = json.loads(response.data)
 
-		for key in testbird:
-			self.assertEqual(testbird[key], response[key])
+		for key in self.testbird:
+			self.assertEqual(self.testbird[key], response[key])
 
 		#Test with missing rfid
-		testbird['rfid'] = ""
-		response = self.app.post('/api/birds/', data=testbird)
+		invalidbird = self.testbird.copy()
+		invalidbird["rfid"] = ""
+		response = self.app.post('/api/birds/', data=invalidbird)
 
 		self.assertEqual(response.status_code, 400)
 		self.assertTrue(response.data)
 		self.assertEqual(response.data.decode(), 'rfid not supplied')
 
-
 	def testPut(self):
-		pass
+		self.app.post('/api/birds/', data=self.testbird)
+
+		temp = self.testbird.copy()
+		temp["billDepth"] = 3.5
+		temp["billLength"] = 10.3
+		temp["billWidth"] = 3.4
+		temp["birdWeight"] = 1
+		response = self.app.put('/api/birds/TESTBIRD', data=temp)
+
+		self.assertEqual(response.status_code, 201)
+		self.assertTrue(response.data)
+		response = json.loads(response.data)
+
+		for key in temp:
+			self.assertEqual(temp[key], response[key])
+
+		temp["rfid"] = ""
+		response = self.app.post('/api/birds/', data=temp)
+
+		self.assertEqual(response.status_code, 400)
+		self.assertTrue(response.data)
+		self.assertEqual(response.data.decode(), 'rfid not supplied')
+
 	def testDelete(self):
 		pass
 
