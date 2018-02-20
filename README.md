@@ -1,5 +1,4 @@
 # JPCP Server API
-
 An api to interact with data for the JP chickadee project. 
 
 + `euclid.nmu.edu:{port}/api` will be the root directory, where ports can be:
@@ -9,6 +8,35 @@ An api to interact with data for the JP chickadee project.
 	+ `8160` - The testing api, only running occasionally and updated frequently
 
 All date parameters are assumed to be in unix time format.
+
+
+### To Run:
+Dependencies:
+
+    Flask==0.12
+    Flask_MySQLdb==0.2.0
+    flask_cors==3.0.3
+    mysql_connector_repackaged==0.3.1
+    
+A local instance of mysql with the correct schema is required. Runtime configuration of the api and database are specified in a json file named `config` in the same directory as `app.py`, with the following format:
+
+  	{
+      "username": "", 					# username for mysql
+      "password": "",					# password for mysql
+      "database": "chickadeesTesting",	# name of database to use
+      "host": "localhost",				# hostname for flask server to run on
+      "port": 8155,						# port for flask server to run on
+  	}
+
+This format is temporary and best used for development, the ideal endgame is to have username/password be entered as input when `app.py` is run and to have flask deployed on Apache to handle hosting needs.
+
+Running `python3 app.py` will start hosting on the hostname/port from the config file.
+     
+    
+### To Run Tests:
+While in the same directory as `app.py`, running the package `nose2` will search for all test cases and run them, with no further configuration needed.
+ 		
+
 
 
 # Interaction
@@ -53,7 +81,7 @@ Example data to demonstrate formatting
 	"battery": 0, 
 	"id": "CLIF", 
 	"fullName": "Cliff", 
-	"lastContactTimestamp": 0, 
+	"lastContact": 0, 
 	"lastPath": "", 
 	"lastStatus": "", 
 	"latitude": 46.5523000, 
@@ -67,7 +95,7 @@ Example data to demonstrate formatting
 	"bagWeight": 12.3, 
 	"bandNumber": "2830-56002", 
 	"banders": "Lindsay, Szarmach", 
-	"bandCombo": "#a0/I"
+	"bandCombo": "#B/v0"
 	"bibWidth": 22.5, 
 	"billDepth": 3.7, 
 	"billLength": 5.1, 
@@ -78,7 +106,7 @@ Example data to demonstrate formatting
 	"captureTimestamp": 1507296600, 
 	"image": null, 
 	"legLeftBottom": "NONE", 
-	"legLeftTop": "i0", 
+	"legLeftTop": "v0", 
 	"legRightBottom": "#", 
 	"legRightTop": "B",
 	"logTimestamp": 1507579560, 
@@ -104,7 +132,8 @@ Example data to demonstrate formatting
 	"feederID": CLIF
 	"visitTimestamp": 1492873308
 	"temperature": 44
-	"mass": 108
+	"mass": 108,
+    "bandCombo": "#a0/V"
 }
 ```
 
@@ -129,7 +158,7 @@ Example data to demonstrate formatting
     "A": "AZURE darvic", 
     "B": "BROWN darvic", 
     "G": "GREEN darvic", 
-    "I": "INDIGO darvic",  
+    "V": "VIOLET darvic",  
     "a0": "azure no stripe RFID", 
     "ab": "azure black stripe RFID", 
     "ag": "azure green stripe RFID", 
