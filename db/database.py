@@ -13,7 +13,7 @@ class chickadeeDatabase():
 		
 	def query(self, aQuery):
 		cur = self.mysql.connection.cursor()
-
+		
 		try:
 			cur.execute(aQuery)
 		except (MySQLdb.Error) as e:

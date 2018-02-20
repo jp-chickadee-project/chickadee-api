@@ -13,10 +13,11 @@
 ### Feeders
 | Test Name | Done? | Passing? |
 | --------- | ----- | -------- |
-| GET 		| No 	| No 	   |
-| POST 		| No 	| No 	   |
-| PUT 		| No 	| No 	   |
-| DELETE 	| No 	| No 	   |
+| GET Many	| Yes 	| Yes 	   |
+| GET One	| Yes 	| Yes 	   |
+| POST 		| Yes 	| Yes 	   |
+| PUT 		| Yes 	| Yes 	   |
+| DELETE 	| Yes 	| Yes 	   |
 
 
 ### Visits

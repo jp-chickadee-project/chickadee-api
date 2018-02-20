@@ -15,6 +15,9 @@ class TestBirds(ChickadeeTester):
 			"suspectedSex": "female", 
 			"tailLength": 37
 		}
+		
+	def tearDown(self):
+		self.app.delete('/api/birds/TESTBIRD')
 
 	def testGetAll(self):
 		response = self.app.get('/api/birds/')
@@ -113,9 +116,6 @@ class TestBirds(ChickadeeTester):
 		response = self.app.get('/api/birds/TESTBIRD')
 		self.assertEqual(response.status_code, 404)
 		self.assertEqual(response.data.decode(), "404 - Specified rfid does not exist")
-
-	def tearDown(self):
-		self.app.delete('/api/birds/TESTBIRD')
 
 if __name__ == "__main__":
 	unittest.main()
