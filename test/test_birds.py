@@ -63,9 +63,9 @@ class TestBirds(ChickadeeTester):
 		self.assertTrue('BCCH' in response['species'])
 		self.assertTrue('WBNU' in response['species'])
 
-		self.assertTrue('female' in response['species'])
-		self.assertTrue('male' in response['species'])
-		self.assertTrue('unknown' in response['species'])
+		self.assertTrue('female' in response['suspectedSex'])
+		self.assertTrue('male' in response['suspectedSex'])
+		self.assertTrue('unknown' in response['suspectedSex'])
 
 		self.assertTrue('feather' in response['tissueSample'])
 
