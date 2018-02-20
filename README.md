@@ -15,34 +15,33 @@ All date parameters are assumed to be in unix time format.
 
 ## Feeders
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
-|---------------|--------|---------------------------------------------------------|------------------------------------------| -------------|
-| All Feeders   | GET    | /api/feeders                                            | List of all feeders                      | Yes          |
-| Create Feeder | POST   | /api/feeders                                            | The created feeder                       | Yes           |
-| Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     | Yes          |
-| Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       | Yes           |
-| Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      | Yes          |
-| Visit Range   | GET    | /api/feeders/{feederID}?start={aDate}&end={aDate}       | Visits to feeder within given dates      | Yes          |
+
+| Interaction   | Verb   | Endpoint                                                | Returns                                  | 
+|---------------|--------|---------------------------------------------------------|------------------------------------------| 
+| All Feeders   | GET    | /api/feeders                                            | List of all feeders                      |
+| Create Feeder | POST   | /api/feeders                                            | The created feeder                       |
+| Feeder by ID  | GET    | /api/feeders/{feederID}                                 | The specified feeder                     |
+| Update by ID  | PUT    | /api/feeders/{feederID}                                 | The updated feeder                       |
+| Delete by ID  | DELETE | /api/feeders/{feederID}                                 | The empty object {}                      |
 
 ## Birds
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
-|---------------|--------|---------------------------------------------------------|------------------------------------------| -------------|
-| All Birds     | GET    | /api/birds                                              | List of all birds                        | Yes          |
-| Create Bird   | POST   | /api/birds                                              | The created bird                         | Yes           |
-| Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       | Yes          |
-| Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         | Yes           |
-| Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      | Yes          |
-| Visit Range   | GET    | /api/birds/{rfid}?start={aDate}&end={aDate}             | All visits by the specified bird within given dates| Yes |
-| Bird Options  | GET    | /api/birds/options                                      | List of bird options                     | Yes          |
+| Interaction   | Verb   | Endpoint                                                | Returns                                  |
+|---------------|--------|---------------------------------------------------------|------------------------------------------|
+| All Birds     | GET    | /api/birds                                              | List of all birds                        |
+| Create Bird   | POST   | /api/birds                                              | The created bird                         |
+| Bird by ID    | GET    | /api/birds/{rfid}                                       | The specified bird                       |
+| Update by ID  | PUT    | /api/birds/{rfid}                                       | The updated bird                         |
+| Delete by ID  | DELETE | /api/birds/{rfid}                                       | The empty object {}                      |
+| Bird Options  | GET    | /api/birds/options                                      | List of bird options                     |
 
 ## Visits
 
-| Interaction   | Verb   | Endpoint                                                | Returns                                  | Implemented? |
-|---------------|--------|---------------------------------------------------------|------------------------------------------|--------------|
-| Add Visit     | POST    | /api/visits                				   | The created visit    		      | Yes |
-| Visit Range   | GET    | /api/visits?start={aDate}&end={aDate}                   | List of all visits within given dates    | Yes |
-
+| Interaction   | Verb   | Endpoint | Returns | Parameters |
+|---------------|--------|--------------------|--------------------------------|------------------------------|
+| Add Visit     | POST   | /api/visits        | The created visit              |                              |
+| Visit Range   | GET    | /api/visits        | List of matching visits        | rfid, feederID, start, end   |
+| Latest Visits | GET    | /api/visits/latest | List of matching latest visits | rfid, feederID, limit        |
 
 # Data Templates
 

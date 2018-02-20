@@ -5,14 +5,15 @@ class chickadeeDatabase():
 	pri_keys = {
 		"birds": "rfid",
 		"feeders": "id",
+		"users": "username"
 	}
 
 	def __init__(self):
 		self.mysql = MySQL()
-
+		
 	def query(self, aQuery):
 		cur = self.mysql.connection.cursor()
-
+		
 		try:
 			cur.execute(aQuery)
 		except (MySQLdb.Error) as e:
@@ -31,15 +32,6 @@ class chickadeeDatabase():
 		return self.query(
 			"SELECT %s FROM %s;" 
 				% (filters, table))
-
-	def getVisitRange(self, start, end, field="", key=""):
-		keyCondition = ""
-		if key:
-			keyCondition = "AND %s = '%s'" % (field, key)
-
-		return self.query(
-			"SELECT * FROM visits WHERE visitTimestamp BETWEEN %s AND %s %s;"
-				% (start, end, keyCondition))
 
 	def getRow(self, table, key):
 		return self.query(

@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, current_app
 import flask.logging
 from flask.json import JSONEncoder
 from flask_cors import CORS
@@ -7,6 +7,7 @@ from db.database import chickadeeDatabase
 from views.birds import birds
 from views.visits import visits
 from views.feeders import feeders
+from views.users import users
 
 import json
 import logging
@@ -40,24 +41,29 @@ def log(logger, request, message):
 		message)
 
 app = Flask(__name__)
+
 CORS(app)
+
 
 @app.after_request
 def after_request(response):
+	if "LOGGER" not in current_app.config:
+		return response
 	if response.status_code != 500:
-		log(logger, request, response.status)
+		log(current_app.config["LOGGER"], request, response.status)
 	return response
 
 @app.errorhandler(Exception)
 def exceptions(e):
 	backtrace = "500 INTERNAL SERVER ERROR\n" + traceback.format_exc()
-	log(logger, request, backtrace)
+	log(current_app.config["LOGGER"], request, backtrace)
 	return "Internal Server Error", 500
 
 if __name__ == '__main__':
 	app.register_blueprint(birds)
 	app.register_blueprint(visits)
 	app.register_blueprint(feeders)
+	app.register_blueprint(users)
 
 	app.json_encoder = CustomJSONEncoder
 
@@ -68,6 +74,7 @@ if __name__ == '__main__':
 	logger.setLevel(logging.INFO)
 
 	apiconfig = json.load(open('config', 'r'))
+	app.config["LOGGER"] = logger
 	app.config['MYSQL_DATABASE_USER'] = apiconfig["username"]
 	app.config['MYSQL_DATABASE_PASSWORD'] = apiconfig["password"]
 	app.config['MYSQL_DB'] = apiconfig["database"]

@@ -1,14 +1,15 @@
-__pycache__/*
 __init__.py
 config
 log
+log.test
+.coverage
 
+__pycache__/*
 views/__pycache__/*
-
 db/data/
 db/__pycache__/*
-
-test/*
+test/__pycache__/*
+https/*
 
 bin
 include

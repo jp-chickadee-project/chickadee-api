@@ -1,62 +1,56 @@
 from flask import Blueprint, request, current_app, jsonify, Response
 from collections import defaultdict
-import json
 
 birds = Blueprint('birds', __name__)
 
-@birds.route("/api/birds/<rfid>", methods=['GET', 'PUT', 'DELETE'])
-def birdsByID(rfid):
+@birds.route("/api/birds/<rfid>", methods=['GET'])
+def getBird(rfid):
 	db = current_app.config['DATABASE']
 
 	if db.getRow("birds", rfid) == []:
 		return Response("404 - Specified rfid does not exist", status=404);
 
-	if request.method == 'GET':
-		start = request.args.get("start")
-		end = request.args.get("end")
+	return jsonify(db.getRow("birds", rfid)), 200
 
-		if start and end:
-			resp, code = jsonify(db.getVisitRange(start, end, field="rfid", key=rfid)), 200
-		else:
-			resp, code = jsonify(db.getRow("birds", rfid)), 200
+@birds.route("/api/birds/<rfid>", methods=['PUT', 'DELETE'])
+def modifyBird(rfid):
+	db = current_app.config['DATABASE']
+
+	if db.getRow("birds", rfid) == []:
+		return Response("404 - Specified rfid does not exist", status=404);
 
 	if request.method == 'PUT':
 		db.updateRow("birds", rfid, request.form)
-		resp, code = jsonify(db.getRow("birds", rfid)), 201
+		return jsonify(db.getRow("birds", rfid)), 201
 
-	if request.method == "DELETE":
-		resp, code = jsonify(db.deleteRow("birds", rfid)), 204
+	if request.method == 'DELETE':
+		return jsonify(db.deleteRow("birds", rfid)), 204
 
-	resp.status_code = code
-	return resp
+@birds.route("/api/birds/", methods=['GET'])
+def getAllBirds():
+	db = current_app.config['DATABASE']
+	return jsonify(db.getTable("birds")), 200
 
-@birds.route("/api/birds/", methods=['GET', 'POST'])
-def birdCollection():
+@birds.route("/api/birds/", methods=['POST'])
+def addBird():
 	db = current_app.config['DATABASE']
 
-	if request.method == 'GET':
-		resp, code = jsonify(db.getTable("birds")), 200
+	if not request.form["rfid"]:
+		return Response("rfid not supplied", status=400)
 
-	if request.method == 'POST':
-		if request.form["rfid"]:
-			form = defaultdict(lambda: "")
-			for key, value in request.form.items():
-				form[key] = value
+	form = defaultdict(lambda: "")
+	for key, value in request.form.items():
+		form[key] = value
 
-			form["bandCombo"] = "%s%s/%s%s" % (
-				form["legRightTop"], 
-				form["legRightBottom"], 
-				form["legLeftTop"], 
-				form["legLeftBottom"]
-			)
-			db.createRow("birds", form)
-			resp, code = jsonify(db.getRow("birds", form["rfid"])), 201
-		else:
-			resp, code = Response("rfid not supplied", status=400)
-
-
-	resp.status_code = code
-	return resp
+	if "bandCombo" not in form:
+		form["bandCombo"] = "%s%s/%s%s" % (
+			form["legRightTop"], 
+			form["legRightBottom"], 
+			form["legLeftTop"], 
+			form["legLeftBottom"]
+		)
+	db.createRow("birds", form)
+	return jsonify(db.getRow("birds", form["rfid"])), 201
 
 
 @birds.route("/api/birds/options", methods=['GET'])
@@ -72,12 +66,10 @@ def birdOptions():
 	for key in options:
 		options[key] = [options[key][x][key] for x in range(len(options[key]))]
 
-	bands = db.getTable("bands")[:-1]
-	temp = {}
+	bands = db.getTable("bands")
+	options["bands"] = {}
 	for i, item in enumerate(bands):
-		temp[item["band"]] = item["description"]
-
-	options["bands"] = temp
+		options["bands"][item["band"]] = item["description"]
 
 	banders = db.getTable("birds", filters="DISTINCT banders")
 	options["banders"] = [x["banders"] for x in banders]

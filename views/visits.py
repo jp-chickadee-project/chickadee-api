@@ -1,27 +1,58 @@
 from flask import Blueprint, request, current_app, jsonify, Response
+from copy import copy
+from collections import defaultdict
 
 visits = Blueprint('visits', __name__)
 
-@visits.route("/api/visits/", methods=['GET', 'POST'])
-def visitCollection():
+#This is a messy, but I can't think of a cleaner way at the moment.
+#Ideally all SQL syntax here would be abstracted to the ChickadeeDatabase class
+@visits.route("/api/visits/", methods=['GET'])
+def getVisits(limit=None):
 	db = current_app.config['DATABASE']
 
-	if request.method == "GET":
-		start = request.args.get("start")
-		end = request.args.get("end")
+	start = request.args.get("start")
+	end = request.args.get("end")
+	rfid = request.args.get("rfid")
+	feederID = request.args.get("feederID")
 
-		if start and end and int(start) < int(end):
-			resp, code = jsonify(db.getVisitRange(start, end)), 200
-		else:
-			resp, code = Response("Bad time-range specification"), 400
+	constraints = []
 
+	if rfid:
+		constraints.append("rfid = '%s'" % (rfid))
+	if feederID:
+		constraints.append("feederID = '%s'" % (feederID))
+	if start and end and not limit:
+		if int(start) > int(end):
+			return Response("Bad time-range specification", status=400)
+		constraints.append("visitTimestamp BETWEEN %s AND %s" % (start, end))
 
-	if request.method == 'POST':
-		if request.form["rfid"] and request.form["feederID"]:
-			db.createRow("visits", request.form)
-			resp, code = Response(request.form), 200
-		else:
-			resp, code = Response("Primary keys not supplied"), 400
+	query = "SELECT * FROM visits "
+	if constraints:
+		query += "WHERE " + " AND ".join(constraints)
+	query += " ORDER BY visitTimeStamp DESC "
+	if limit:
+		query += " LIMIT %s" % (limit)
 
-	resp.status_code = code
-	return resp
+	return jsonify(db.query(query + ";")), 200
+
+@visits.route("/api/visits/", methods=['POST'])
+def addVisit():
+	db = current_app.config['DATABASE']
+
+	if not (request.form["rfid"] and request.form["feederID"]):
+		return Response("Primary keys not properly supplied", status=400)
+
+	form = defaultdict(lambda: "")
+	for key, value in request.form.items():
+		form[key] = value
+	correspondingBird = db.getRow("birds", form["rfid"])
+
+	form["bandCombo"] = correspondingBird["bandCombo"]
+	db.createRow("visits", form)
+
+	return Response(form, status=200)
+
+@visits.route("/api/visits/latest", methods=['GET'])
+def getLatestVisits():
+	limit = request.args.get("limit")
+	return getVisits(limit if limit else 10)
