@@ -5,7 +5,7 @@
 | --------- | ----- | -------- |
 | GET Many	| Yes 	| Yes 	   |
 | GET One	| Yes 	| Yes 	   |
-| POST 		| No 	| No 	   |
+| POST 		| Yes 	| Yes 	   |
 | PUT 		| No 	| No 	   |
 | DELETE 	| No 	| No 	   |
 | Options 	| Yes 	| Yes 	   |

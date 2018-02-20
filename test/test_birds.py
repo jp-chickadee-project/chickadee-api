@@ -5,7 +5,7 @@ from pprint import pprint
 from chickadee_tester import ChickadeeTester
 
 class TestBirds(ChickadeeTester):
-	def testGetBirds(self):
+	def testGetAll(self):
 		response = self.app.get('/api/birds/')
 		self.assertEqual(response.status_code, 200)
 		self.assertTrue(response.data)
@@ -14,7 +14,7 @@ class TestBirds(ChickadeeTester):
 		self.assertTrue(response[0]['rfid'])
 		self.assertTrue(response[0]['bandCombo'])
 
-	def testGetOneBird(self):
+	def testGetOne(self):
 		response = self.app.get('/api/birds/011016A269')
 		self.assertEqual(response.status_code, 200)
 		self.assertTrue(response.data)
@@ -26,7 +26,7 @@ class TestBirds(ChickadeeTester):
 		self.assertTrue(response.data)
 		self.assertEqual(response.data.decode(), "404 - Specified rfid does not exist")
 
-	def testBirdOptions(self):
+	def testGetOptions(self):
 		response = self.app.get('/api/birds/options')
 		self.assertEqual(response.status_code, 200)
 		self.assertTrue(response.data)
@@ -50,6 +50,41 @@ class TestBirds(ChickadeeTester):
 		self.assertEqual(response['species'], ['RBNU', 'BCCH', 'WBNU', None])
 		self.assertEqual(response['suspectedSex'], ['female', 'unknown', '', 'male', None])
 		self.assertEqual(response['tissueSample'], ['feather', 'none', 'no', None])
+
+
+	def testPost(self):
+		testbird = {
+				"rfid": "TESTBIRD",
+				"bandCombo": "#v/v0",
+				"species": "RBNU", 
+				"suspectedSex": "female", 
+				"tailLength": 37
+		}
+		response = self.app.post('/api/birds/', data=testbird)
+
+		self.assertEqual(response.status_code, 201)
+		self.assertTrue(response.data)
+		response = json.loads(response.data)
+
+		for key in testbird:
+			self.assertEqual(testbird[key], response[key])
+
+		#Test with missing rfid
+		testbird['rfid'] = ""
+		response = self.app.post('/api/birds/', data=testbird)
+
+		self.assertEqual(response.status_code, 400)
+		self.assertTrue(response.data)
+		self.assertEqual(response.data.decode(), 'rfid not supplied')
+
+
+	def testPut(self):
+		pass
+	def testDelete(self):
+		pass
+
+	def tearDown(self):
+		self.app.delete('/api/birds/TESTBIRD')
 
 if __name__ == "__main__":
 	unittest.main()

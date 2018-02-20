@@ -43,6 +43,8 @@ app = Flask(__name__)
 
 @app.after_request
 def after_request(response):
+	if "LOGGER" not in current_app.config:
+		return response
 	if response.status_code != 500:
 		log(current_app.config["LOGGER"], request, response.status)
 	return response

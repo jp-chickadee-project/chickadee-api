@@ -25,13 +25,6 @@ class ChickadeeTester(unittest.TestCase):
 
 		app.json_encoder = CustomJSONEncoder
 
-		logger = logging.getLogger(__name__)
-		handler = logging.FileHandler('log.test')
-		handler.setLevel(logging.INFO)
-		logger.addHandler(handler)
-		logger.setLevel(logging.INFO)
-
-		app.config["LOGGER"] = logger
 		app.config['TESTING'] = True
 		app.config['WTF_CSRF_ENABLED'] = False
 		app.config['DEBUG'] = False
@@ -48,6 +41,3 @@ class ChickadeeTester(unittest.TestCase):
 
 		self.app = app.test_client()
 		self.assertEqual(app.debug, False)
-
-	def tearDown(self):
-		pass

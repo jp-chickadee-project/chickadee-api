@@ -42,12 +42,13 @@ def addBird():
 	for key, value in request.form.items():
 		form[key] = value
 
-	form["bandCombo"] = "%s%s/%s%s" % (
-		form["legRightTop"], 
-		form["legRightBottom"], 
-		form["legLeftTop"], 
-		form["legLeftBottom"]
-	)
+	if "bandCombo" not in form:
+		form["bandCombo"] = "%s%s/%s%s" % (
+			form["legRightTop"], 
+			form["legRightBottom"], 
+			form["legLeftTop"], 
+			form["legLeftBottom"]
+		)
 	db.createRow("birds", form)
 	return jsonify(db.getRow("birds", form["rfid"])), 201
 
