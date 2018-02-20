@@ -5,11 +5,26 @@ from pprint import pprint
 from chickadee_tester import ChickadeeTester
 
 class TestBirds(ChickadeeTester):
-	def setUp(self):
-		super(TestBirds, self).setUp()
+	def testGetBirds(self):
+		response = self.app.get('/api/birds/')
+		self.assertEqual(response.status_code, 200)
+		self.assertTrue(response.data)
+		response = json.loads(response.data)
 
-	def tearDown(self):
-		pass
+		self.assertTrue(response[0]['rfid'])
+		self.assertTrue(response[0]['bandCombo'])
+
+	def testGetOneBird(self):
+		response = self.app.get('/api/birds/011016A269')
+		self.assertEqual(response.status_code, 200)
+		self.assertTrue(response.data)
+		response = json.loads(response.data)
+		self.assertEqual(response['rfid'], "011016A269")
+
+		response = self.app.get('/api/birds/nonsense')
+		self.assertEqual(response.status_code, 404)
+		self.assertTrue(response.data)
+		self.assertEqual(response.data.decode(), "404 - Specified rfid does not exist")
 
 	def testBirdOptions(self):
 		response = self.app.get('/api/birds/options')

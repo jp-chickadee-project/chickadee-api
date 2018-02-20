@@ -10,7 +10,7 @@ class chickadeeDatabase():
 
 	def __init__(self):
 		self.mysql = MySQL()
-
+		
 	def query(self, aQuery):
 		cur = self.mysql.connection.cursor()
 

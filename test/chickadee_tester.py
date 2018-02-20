@@ -10,9 +10,9 @@ from views.feeders import feeders
 from views.users import users
 
 
-#This class is subclassed by the other testing since the process 
+#This class is subclassed by the other testing modules since the process 
 #for setting up the flaskapp is identical across test cases
-
+#TODO: make setUp not total shit
 
 TEST_DB = 'chickadeesTesting'
 
@@ -39,14 +39,15 @@ class ChickadeeTester(unittest.TestCase):
 		app.config['MYSQL_DATABASE_USER'] = ""
 		app.config['MYSQL_DATABASE_PASSWORD'] = ""
 		app.config['MYSQL_DB'] = TEST_DB
-		app.config['DATABASE'] = chickadeeDatabase()       
 
-		with app.app_context():
-			app.config['DATABASE'].mysql.init_app(app)
+		if 'DATABASE' not in app.config:
+			app.config['DATABASE'] = chickadeeDatabase()       
+
+			with app.app_context():
+				app.config['DATABASE'].mysql.init_app(app)
 
 		self.app = app.test_client()
 		self.assertEqual(app.debug, False)
 
 	def tearDown(self):
 		pass
- 
