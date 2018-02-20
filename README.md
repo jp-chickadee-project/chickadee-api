@@ -128,12 +128,12 @@ Example data to demonstrate formatting
 ## Visits
 ```
 {
-	"rfid": 011016A269
-	"feederID": CLIF
-	"visitTimestamp": 1492873308
-	"temperature": 44
+	"rfid": "011016A269",
+	"feederID": "CLIF",
+	"visitTimestamp": 1492873308,
+	"temperature": 44,
 	"mass": 108,
-    "bandCombo": "#a0/V"
+    "bandCombo": "#a0/V",
 }
 ```
 
