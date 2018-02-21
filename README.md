@@ -1,15 +1,20 @@
 # JPCP Server API
+An api to interact with data for the JP chickadee project. All date parameters are assumed to be in unix time format.
 
-An api to interact with data for the JP chickadee project. 
+### To Run:
+Install dependencies:
 
-+ `euclid.nmu.edu:{port}/api` will be the root directory, where ports can be:
+	pip3 install -r requirements.txt
+
+Running development server:
+
+	python3 manage.py runserver -h <HOSTNAME> -p <PORT>
 	
-	+ `8155` - The production api, ideally running constantly and updated during downtime
-	
-	+ `8160` - The testing api, only running occasionally and updated frequently
+Running tests:
 
-All date parameters are assumed to be in unix time format.
-
+	python3 manage.py test
+    
+A local instance of mysql with the correct schema is required.
 
 # Interaction
 
@@ -53,7 +58,7 @@ Example data to demonstrate formatting
 	"battery": 0, 
 	"id": "CLIF", 
 	"fullName": "Cliff", 
-	"lastContactTimestamp": 0, 
+	"lastContact": 0, 
 	"lastPath": "", 
 	"lastStatus": "", 
 	"latitude": 46.5523000, 
@@ -67,7 +72,7 @@ Example data to demonstrate formatting
 	"bagWeight": 12.3, 
 	"bandNumber": "2830-56002", 
 	"banders": "Lindsay, Szarmach", 
-	"bandCombo": "#a0/I"
+	"bandCombo": "#B/v0"
 	"bibWidth": 22.5, 
 	"billDepth": 3.7, 
 	"billLength": 5.1, 
@@ -78,7 +83,7 @@ Example data to demonstrate formatting
 	"captureTimestamp": 1507296600, 
 	"image": null, 
 	"legLeftBottom": "NONE", 
-	"legLeftTop": "i0", 
+	"legLeftTop": "v0", 
 	"legRightBottom": "#", 
 	"legRightTop": "B",
 	"logTimestamp": 1507579560, 
@@ -100,11 +105,12 @@ Example data to demonstrate formatting
 ## Visits
 ```
 {
-	"rfid": 011016A269
-	"feederID": CLIF
-	"visitTimestamp": 1492873308
-	"temperature": 44
-	"mass": 108
+	"rfid": "011016A269",
+	"feederID": "CLIF",
+	"visitTimestamp": 1492873308,
+	"temperature": 44,
+	"mass": 108,
+    	"bandCombo": "#a0/V",
 }
 ```
 
@@ -129,7 +135,7 @@ Example data to demonstrate formatting
     "A": "AZURE darvic", 
     "B": "BROWN darvic", 
     "G": "GREEN darvic", 
-    "I": "INDIGO darvic",  
+    "V": "VIOLET darvic",  
     "a0": "azure no stripe RFID", 
     "ab": "azure black stripe RFID", 
     "ag": "azure green stripe RFID", 
