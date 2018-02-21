@@ -11,12 +11,9 @@ All date parameters are assumed to be in unix time format.
 
 
 ### To Run:
-Dependencies:
+To install dependencies, run
 
-    Flask==0.12
-    Flask_MySQLdb==0.2.0
-    flask_cors==3.0.3
-    mysql_connector_repackaged==0.3.1
+	pip3 install -r requirements.txt
     
 A local instance of mysql with the correct schema is required. Runtime configuration of the api and database are specified in a json file named `config` in the same directory as `app.py`, with the following format:
 
