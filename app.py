@@ -1,6 +1,7 @@
 from flask import Flask, request, current_app
 import flask.logging
 from flask.json import JSONEncoder
+from flask_cors import CORS
 
 from db.database import chickadeeDatabase
 from views.birds import birds
@@ -40,6 +41,8 @@ def log(logger, request, message):
 		message)
 
 app = Flask(__name__)
+
+CORS(app)
 
 @app.after_request
 def after_request(response):

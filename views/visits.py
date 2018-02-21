@@ -21,10 +21,13 @@ def getVisits(limit=None):
 		constraints.append("rfid = '%s'" % (rfid))
 	if feederID:
 		constraints.append("feederID = '%s'" % (feederID))
+
 	if start and end and not limit:
 		if int(start) > int(end):
 			return Response("Bad time-range specification", status=400)
 		constraints.append("visitTimestamp BETWEEN %s AND %s" % (start, end))
+	elif not limit:
+		return Response("Bad time-range specification", status=400)
 
 	query = "SELECT * FROM visits "
 	if constraints:
