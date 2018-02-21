@@ -6,6 +6,12 @@ Install dependencies:
 
 	pip3 install -r requirements.txt
 
+Create database:
+
+	python3 manage.py createdb -u <username> -p <password> --dbname <database>
+
+After creating the database, edit `config.py` to match the desired database name.
+
 Running development server:
 
 	python3 manage.py runserver -h <HOSTNAME> -p <PORT>
@@ -14,8 +20,6 @@ Running tests:
 
 	python3 manage.py test
     
-A local instance of mysql with the correct schema is required.
-
 # Interaction
 
 ## Feeders
