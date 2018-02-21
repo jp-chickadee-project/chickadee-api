@@ -6,7 +6,7 @@ visits = Blueprint('visits', __name__)
 
 #This is a messy, but I can't think of a cleaner way at the moment.
 #Ideally all SQL syntax here would be abstracted to the ChickadeeDatabase class
-@visits.route("/api/visits/", methods=['GET'])
+@visits.route("/", methods=['GET'])
 def getVisits(limit=None):
 	db = current_app.config['DATABASE']
 
@@ -38,7 +38,7 @@ def getVisits(limit=None):
 
 	return jsonify(db.query(query + ";")), 200
 
-@visits.route("/api/visits/", methods=['POST'])
+@visits.route("/", methods=['POST'])
 def addVisit():
 	db = current_app.config['DATABASE']
 
@@ -55,7 +55,7 @@ def addVisit():
 
 	return Response(form, status=200)
 
-@visits.route("/api/visits/latest", methods=['GET'])
+@visits.route("/latest", methods=['GET'])
 def getLatestVisits():
 	limit = request.args.get("limit")
 	return getVisits(limit if limit else 10)

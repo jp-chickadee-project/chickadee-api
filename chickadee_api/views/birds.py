@@ -3,7 +3,7 @@ from collections import defaultdict
 
 birds = Blueprint('birds', __name__)
 
-@birds.route("/api/birds/<rfid>", methods=['GET'])
+@birds.route("/<rfid>", methods=['GET'])
 def getBird(rfid):
 	db = current_app.config['DATABASE']
 
@@ -12,7 +12,7 @@ def getBird(rfid):
 
 	return jsonify(db.getRow("birds", rfid)), 200
 
-@birds.route("/api/birds/<rfid>", methods=['PUT', 'DELETE'])
+@birds.route("/<rfid>", methods=['PUT', 'DELETE'])
 def modifyBird(rfid):
 	db = current_app.config['DATABASE']
 
@@ -26,12 +26,12 @@ def modifyBird(rfid):
 	if request.method == 'DELETE':
 		return jsonify(db.deleteRow("birds", rfid)), 204
 
-@birds.route("/api/birds/", methods=['GET'])
+@birds.route("/", methods=['GET'])
 def getAllBirds():
 	db = current_app.config['DATABASE']
 	return jsonify(db.getTable("birds")), 200
 
-@birds.route("/api/birds/", methods=['POST'])
+@birds.route("/", methods=['POST'])
 def addBird():
 	db = current_app.config['DATABASE']
 
@@ -53,7 +53,7 @@ def addBird():
 	return jsonify(db.getRow("birds", form["rfid"])), 201
 
 
-@birds.route("/api/birds/options", methods=['GET'])
+@birds.route("/options", methods=['GET'])
 def birdOptions():
 	db = current_app.config['DATABASE']
 

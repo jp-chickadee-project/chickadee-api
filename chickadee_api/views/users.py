@@ -2,7 +2,7 @@ from flask import Blueprint, request, current_app, jsonify, Response
 
 users = Blueprint('users', __name__)
 
-@users.route("/api/users", methods=['GET', 'POST', 'PUT', 'DELETE'])
+@users.route("/", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def usersByName():
 	db = current_app.config['DATABASE']
 	username, pwHash = "", ""

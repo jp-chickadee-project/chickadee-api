@@ -2,7 +2,7 @@ from flask import Blueprint, request, current_app, jsonify, Response
 
 feeders = Blueprint('feeders', __name__)
 
-@feeders.route("/api/feeders/<feederID>", methods=['GET'])
+@feeders.route("/<feederID>", methods=['GET'])
 def getFeeder(feederID):
 	db = current_app.config['DATABASE']
 
@@ -14,7 +14,7 @@ def getFeeder(feederID):
 	resp.status_code = code
 	return resp
 
-@feeders.route("/api/feeders/<feederID>", methods=['PUT', 'DELETE'])
+@feeders.route("/<feederID>", methods=['PUT', 'DELETE'])
 def modifyFeeder(feederID):
 	db = current_app.config['DATABASE']
 
@@ -29,12 +29,12 @@ def modifyFeeder(feederID):
 		return jsonify(db.deleteRow("feeders", feederID)), 204
 
 
-@feeders.route("/api/feeders/", methods=['GET'])
+@feeders.route("/", methods=['GET'])
 def getAllFeeders():
 	db = current_app.config['DATABASE']
 	return jsonify(db.getTable("feeders")), 200
 
-@feeders.route("/api/feeders/", methods=['POST'])
+@feeders.route("/", methods=['POST'])
 def addFeeder():
 	db = current_app.config['DATABASE']
 
