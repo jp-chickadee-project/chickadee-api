@@ -37,9 +37,12 @@ for f in os.listdir(visit_data_path):
 		timestamp = date + " " + line[2][:-1]
 		timestamp = time.mktime(datetime.datetime.strptime(timestamp, "%m/%d/%Y %H:%M:%S").timetuple())
 
+		cursor.execute("SELECT bandCombo FROM birds WHERE rfid = '{0}';".format(rfid))
+		bandCombo = cursor.fetchone()[0]
+
 		command = (
-			"INSERT INTO visits (rfid, visitTimestamp, feederID, temperature, mass) "
-			"VALUES ('{0}', '{1}', '{2}', 0, 0);".format(rfid, timestamp, feederID))
+			"INSERT INTO visits (rfid, visitTimestamp, feederID, bandCombo, temperature, mass) "
+			"VALUES ('{0}', '{1}', '{2}', {3}, 0, 0);".format(rfid, timestamp, feederID, bandCombo))
 		cursor.execute(command)
 
 	warnings = cursor.fetchwarnings()
