@@ -1,13 +1,10 @@
 import mysql.connector as sql
-import csv
 import sys
 import os
 import json
 import time
 import datetime
 
-from itertools import islice
-from pprint import *
 
 try:
 	visit_data_path = os.getcwd() + "/" + sys.argv[1] + "/"

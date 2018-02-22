@@ -1,5 +1,4 @@
 from flask import Blueprint, request, current_app, jsonify, Response
-from copy import copy
 from collections import defaultdict
 
 visits = Blueprint('visits', __name__)

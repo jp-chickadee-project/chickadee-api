@@ -1,11 +1,8 @@
-from flask import Flask, request, current_app
-import flask.logging
+from flask import Flask
 from flask_cors import CORS
 
-import json
 import logging
 import os
-from time import strftime
 
 from .db.database import chickadeeDatabase
 from .chickadee_api import main

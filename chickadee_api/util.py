@@ -1,7 +1,5 @@
 from flask.json import JSONEncoder
 
-import logging
-import traceback
 import datetime
 import decimal
 from time import strftime
