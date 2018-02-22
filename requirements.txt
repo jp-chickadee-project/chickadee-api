@@ -2,4 +2,4 @@ Flask_Script==2.0.6
 Flask_Cors==3.0.3
 Flask==0.12
 Flask_MySQLdb==0.2.0
-mysql_connector_repackaged==0.3.1
+mysql-connector==2.1.4
