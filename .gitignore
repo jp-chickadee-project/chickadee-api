@@ -1,18 +1,14 @@
-__init__.py
-config
 log
-log.test
 .coverage
 
 __pycache__/*
-views/__pycache__/*
-db/data/
-db/__pycache__/*
-test/__pycache__/*
-https/*
+chickadee_api/__pycache__/*
 
-bin
-include
-pip-selfcheck.json
-https
-lib
+chickadee_api/db/__pycache__/*
+chickadee_api/db/data/*
+!chickadee_api/db/data/load_visits.py
+
+chickadee_api/views/__pycache__/*
+
+/test/__pycache__/*
+

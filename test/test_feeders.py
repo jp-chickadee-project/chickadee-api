@@ -1,7 +1,6 @@
 import unittest
 import json
 
-from pprint import pprint
 from chickadee_tester import ChickadeeTester
 
 class TestFeeders(ChickadeeTester):
@@ -25,7 +24,6 @@ class TestFeeders(ChickadeeTester):
 	def testGetAll(self):
 		response = self.app.get('/api/feeders/')
 		self.assertEqual(response.status_code, 200)
-		self.assertTrue(response.data)
 		response = json.loads(response.data.decode())
 
 		self.assertTrue(response[0]['id'])

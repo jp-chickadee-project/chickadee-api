@@ -1,12 +1,11 @@
 from flask import Blueprint, request, current_app, jsonify, Response
-from copy import copy
 from collections import defaultdict
 
 visits = Blueprint('visits', __name__)
 
 #This is a messy, but I can't think of a cleaner way at the moment.
 #Ideally all SQL syntax here would be abstracted to the ChickadeeDatabase class
-@visits.route("/api/visits/", methods=['GET'])
+@visits.route("/", methods=['GET'])
 def getVisits(limit=None):
 	db = current_app.config['DATABASE']
 
@@ -21,10 +20,13 @@ def getVisits(limit=None):
 		constraints.append("rfid = '%s'" % (rfid))
 	if feederID:
 		constraints.append("feederID = '%s'" % (feederID))
+
 	if start and end and not limit:
 		if int(start) > int(end):
 			return Response("Bad time-range specification", status=400)
 		constraints.append("visitTimestamp BETWEEN %s AND %s" % (start, end))
+	elif not limit:
+		return Response("Bad time-range specification", status=400)
 
 	query = "SELECT * FROM visits "
 	if constraints:
@@ -35,7 +37,7 @@ def getVisits(limit=None):
 
 	return jsonify(db.query(query + ";")), 200
 
-@visits.route("/api/visits/", methods=['POST'])
+@visits.route("/", methods=['POST'])
 def addVisit():
 	db = current_app.config['DATABASE']
 
@@ -52,7 +54,7 @@ def addVisit():
 
 	return Response(form, status=200)
 
-@visits.route("/api/visits/latest", methods=['GET'])
+@visits.route("/latest", methods=['GET'])
 def getLatestVisits():
 	limit = request.args.get("limit")
 	return getVisits(limit if limit else 10)
