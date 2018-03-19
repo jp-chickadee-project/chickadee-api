@@ -41,8 +41,15 @@ def getVisits(limit=None):
 def addVisit():
 	db = current_app.config['DATABASE']
 
-	if not (request.form["rfid"] and request.form["feederID"]):
-		return Response("Primary keys not properly supplied", status=400)
+	rfid = request.form["rfid"]
+	feederID = request.form["feederID"]
+
+	if not (rfid and feederID):
+		return Response("Primary keys not supplied", status=400)
+	if db.getRow("birds", rfid) == []:
+		return Response("404 - Specified rfid does not exist", status=404);
+	if db.getRow("feeders", feederID) == []:
+		return Response("404 - Specified feeder does not exist", status=404);
 
 	form = defaultdict(lambda: "")
 	for key, value in request.form.items():
