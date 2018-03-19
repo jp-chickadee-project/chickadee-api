@@ -51,15 +51,16 @@ def addVisit():
 	if db.getRow("feeders", feederID) == []:
 		return Response("404 - Specified feeder does not exist", status=404);
 
+
 	form = defaultdict(lambda: "")
 	for key, value in request.form.items():
 		form[key] = value
-	correspondingBird = db.getRow("birds", form["rfid"])
-
-	form["bandCombo"] = correspondingBird["bandCombo"]
+	if "bandCombo" not in form:
+		correspondingBird = db.getRow("birds", form["rfid"])
+		form["bandCombo"] = correspondingBird["bandCombo"]
 	db.createRow("visits", form)
 
-	return Response(form, status=200)
+	return jsonify(form), 200
 
 @visits.route("/latest", methods=['GET'])
 def getLatestVisits():
