@@ -24,11 +24,13 @@ Running development server:
 	
 	python3 manage.py loadvisits -v <zipfile> -u <username> -d <database>
 
+The above command will open a given zipfile, which is specified by an absolute path like `~/Downloads/visits.zip`, and run through each file inside it. The files given by the bio students have the format `CLIF_2017-06-16.TXT`, where the first four letters are the feederID for all the visits inside that file. The script will then load those visits into the specified database, if it exists and has the proper schema. 
+
 ### To Backup Database:
 	
 	python3 manage.py backup -u <username> -d <database>
 
-The above command will open a given zipfile, which is specified by an absolute path like `~/Downloads/visits.zip`, and run through each file inside it. The files given by the bio students have the format `CLIF_2017-06-16.TXT`, where the first four letters are the feederID for all the visits inside that file. The script will then load those visits into the specified database, if it exists and has the proper schema. 
+Backing up the database will create a file named 'chickadees.sql' in the home directory. This file can be loaded into mysql with the command `mysql <dbname> < chickadees.sql`
 
 # Interaction
 
