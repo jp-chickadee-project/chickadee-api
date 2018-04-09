@@ -9,6 +9,8 @@ import json
 import time
 import datetime
 import zipfile
+import getpass
+
 from chickadee_api import create_app
 
 manager = Manager(create_app)
@@ -22,10 +24,12 @@ def test():
 	return 1
 
 @manager.command
-def createdb(username="", password="", dbname="chickadees"):
+def createdb(username="", dbname="chickadees"):
+	pw = getpass.getpass("Enter Password: ") if username else ""
+
 	cnx = sql.connect(
 		user=username,
-		password=password
+		password=pw
 	)
 
 	cursor = cnx.cursor(buffered=True)
@@ -53,14 +57,16 @@ def createdb(username="", password="", dbname="chickadees"):
 	print("Database created")
 
 @manager.command
-def loadvisits(visitzip="", db="", username="", password=""):
+def loadvisits(visitzip="", db="", username=""):
 	if not visitzip:
 		print("Visit zipfile location not entered, exiting")
 		return
 
+	pw = getpass.getpass("Enter Password: ") if username else ""
+
 	cnx = sql.connect(
 		user=username,
-		password=password,
+		password=pw,
 		database=db
 	)
 	cursor = cnx.cursor(buffered=True)
@@ -96,6 +102,12 @@ def loadvisits(visitzip="", db="", username="", password=""):
 		print("Completed file: " + f.filename)
 	cnx.commit()
 	print("Visits loaded")
+
+@manager.command
+def backup(db="", uname=""):
+	pw = getpass.getpass("Enter Password: ")
+	os.popen("mysqldump " + db +  bool(uname)*(" -u %s -p%s " %(uname,pw)) +
+ 			 " > ~/chickadees.sql")
 
 if __name__ == "__main__":
 	manager.run()
