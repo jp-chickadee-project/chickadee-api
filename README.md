@@ -8,7 +8,7 @@ Install dependencies:
 
 Create database:
 
-	python3 manage.py createdb -u <username> -p <password> --dbname <database>
+	python3 manage.py createdb -u <username> --dbname <database>
 
 After creating the database, edit `config.py` to match the desired database name.
 
@@ -22,8 +22,12 @@ Running development server:
 
 ### To Load Visits:
 	
-	python3 manage.py loadvisits -v <zipfile> -d <database>
+	python3 manage.py loadvisits -v <zipfile> -u <username> -d <database>
+
+### To Backup Database:
 	
+	python3 manage.py backup -u <username> -d <database>
+
 The above command will open a given zipfile, which is specified by an absolute path like `~/Downloads/visits.zip`, and run through each file inside it. The files given by the bio students have the format `CLIF_2017-06-16.TXT`, where the first four letters are the feederID for all the visits inside that file. The script will then load those visits into the specified database, if it exists and has the proper schema. 
 
 # Interaction
