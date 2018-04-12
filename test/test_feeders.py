@@ -19,7 +19,7 @@ class TestFeeders(ChickadeeTester):
 		}
 		
 	def tearDown(self):
-		self.app.delete('/api/feeders/TESTFEEDER')
+		self.app.delete('/api/feeders/TEST')
 
 	def testGetAll(self):
 		response = self.app.get('/api/feeders/')

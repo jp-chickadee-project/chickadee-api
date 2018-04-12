@@ -41,23 +41,34 @@ def getVisits(limit=None):
 def addVisit():
 	db = current_app.config['DATABASE']
 
+	requiredKeys = ["rfid", "feederID", "visitTimestamp"]
+	if not all(key in requiredKeys for key in request.form):
+		return Response("Missing one or more required keys (rfid, feederID, visitTimestamp)", status=400)
+
+
 	rfid = request.form["rfid"]
 	feederID = request.form["feederID"]
 
+	bird = db.getRow("birds", rfid)
+
 	if not (rfid and feederID):
 		return Response("Primary keys not supplied", status=400)
-	if db.getRow("birds", rfid) == []:
+	if bird == []:
 		return Response("404 - Specified rfid does not exist", status=404);
 	if db.getRow("feeders", feederID) == []:
 		return Response("404 - Specified feeder does not exist", status=404);
 
-
 	form = defaultdict(lambda: "")
 	for key, value in request.form.items():
 		form[key] = value
-	if "bandCombo" not in form:
+
+	if not form["bandCombo"] == bird["bandCombo"]:
+		return Response("400 - BandCombo does not match rfid", status=400);
+	else:
 		correspondingBird = db.getRow("birds", form["rfid"])
 		form["bandCombo"] = correspondingBird["bandCombo"]
+
+
 	db.createRow("visits", form)
 
 	return jsonify(form), 200

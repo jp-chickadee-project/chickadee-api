@@ -1,9 +1,10 @@
+import getpass
 
 class Config(object):
 	DEBUG = False
 	TESTING = False
-	MYSQL_DATABASE_USER = ""
-	MYSQL_DATABASE_PASSWORD = ""
+	MYSQL_DATABASE_USER = "root"
+	MYSQL_DATABASE_PASSWORD = "t3b6d8j"
 
 class ProductionConfig(Config):
 	MYSQL_DB = 'chickadees'
