@@ -42,7 +42,7 @@ def addVisit():
 	db = current_app.config['DATABASE']
 
 	requiredKeys = ["rfid", "feederID", "visitTimestamp"]
-	if not all(key in requiredKeys for key in request.form):
+	if not all(key in request.form for key in requiredKeys):
 		return Response("Missing one or more required keys (rfid, feederID, visitTimestamp)", status=400)
 
 
@@ -62,7 +62,7 @@ def addVisit():
 	for key, value in request.form.items():
 		form[key] = value
 
-	if not form["bandCombo"] == bird["bandCombo"]:
+	if not form["bandCombo"] == bird["bandCombo"] and form["bandCombo"]:
 		return Response("400 - BandCombo does not match rfid", status=400);
 	else:
 		correspondingBird = db.getRow("birds", form["rfid"])
