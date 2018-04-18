@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 
 import logging
@@ -12,7 +12,7 @@ from .views.feeders import feeders
 from .views.users import users
 
 from config import config
-from .util import CustomJSONEncoder
+from .util import CustomJSONEncoder, log
 
 def create_app(config_name=None):	
 	app = Flask(__name__)
@@ -30,14 +30,18 @@ def create_app(config_name=None):
 
 	if config_name is not 'production':
 		logger = logging.getLogger(__name__)
-		handler = logging.FileHandler('log')
+		handler = logging.FileHandler('/home/michael/Documents/birdproject/chickadee-api/log')
 		handler.setLevel(logging.INFO)
 		logger.addHandler(handler)
 		logger.setLevel(logging.INFO)
 
 		app.config["LOGGER"] = logger
 
-	app.register_blueprint(main)
+	@app.after_request
+	def after_request(response):
+		log(app.config["LOGGER"], request, response.status)
+		return response
+
 	app.register_blueprint(birds, url_prefix='/api/birds')
 	app.register_blueprint(visits, url_prefix='/api/visits')
 	app.register_blueprint(feeders, url_prefix='/api/feeders')
