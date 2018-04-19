@@ -29,7 +29,7 @@ def create_app(config_name=None):
 
 	if config_name is not 'production':
 		logger = logging.getLogger(__name__)
-		handler = logging.FileHandler('/home/michael/Documents/birdproject/chickadee-api/log')
+		handler = logging.FileHandler('log')
 		handler.setLevel(logging.INFO)
 		logger.addHandler(handler)
 		logger.setLevel(logging.INFO)
