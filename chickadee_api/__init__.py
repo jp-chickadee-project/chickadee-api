@@ -5,7 +5,6 @@ import logging
 import os
 
 from .db.database import chickadeeDatabase
-from .chickadee_api import main
 from .views.birds import birds
 from .views.visits import visits
 from .views.feeders import feeders
