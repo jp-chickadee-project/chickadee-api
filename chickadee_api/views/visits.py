@@ -45,10 +45,8 @@ def addVisit():
 	if not all(key in request.form for key in requiredKeys):
 		return Response("Missing one or more required keys (rfid, feederID, visitTimestamp)", status=400)
 
-
 	rfid = request.form["rfid"]
 	feederID = request.form["feederID"]
-
 	bird = db.getRow("birds", rfid)
 
 	if not (rfid and feederID):
@@ -68,9 +66,7 @@ def addVisit():
 		correspondingBird = db.getRow("birds", form["rfid"])
 		form["bandCombo"] = correspondingBird["bandCombo"]
 
-
 	db.createRow("visits", form)
-
 	return jsonify(form), 200
 
 @visits.route("/latest", methods=['GET'])
