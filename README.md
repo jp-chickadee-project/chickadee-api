@@ -66,13 +66,13 @@ Backing up the database will create a file named 'chickadees.sql' in the home di
 
 # Data Templates
 
-Example data to demonstrate formatting
+Example data to demonstrate formatting. When adding data entries, the fields denoted by a `*` are required while the rest are optional and will typically default to NULL.
 
 ## Feeders
 ```
 {
 	"battery": 0, 
-	"id": "CLIF", 
+*	"id": "CLIF", 
 	"fullName": "Cliff", 
 	"lastContact": 0, 
 	"lastPath": "", 
@@ -88,7 +88,7 @@ Example data to demonstrate formatting
 	"bagWeight": 12.3, 
 	"bandNumber": "2830-56002", 
 	"banders": "Lindsay, Szarmach", 
-	"bandCombo": "#B/v0"
+*	"bandCombo": "#B/v0"
 	"bibWidth": 22.5, 
 	"billDepth": 3.7, 
 	"billLength": 5.1, 
@@ -108,7 +108,7 @@ Example data to demonstrate formatting
 	"netExitTimestamp": 1507262400, 
 	"notes": "molting R6, R6 photos taken", 
 	"releasedTimestamp": 1507262400, 
-	"rfid": "011016A4D4", 
+*	"rfid": "011016A4D4", 
 	"species": "BCCH", 
 	"suspectedSex": "unknown", 
 	"tailLength": 61, 
@@ -121,9 +121,9 @@ Example data to demonstrate formatting
 ## Visits
 ```
 {
-	"rfid": "011016A269",
-	"feederID": "CLIF",
-	"visitTimestamp": 1492873308,
+*	"rfid": "011016A269",
+*	"feederID": "CLIF",
+*	"visitTimestamp": 1492873308,
 	"temperature": 44,
 	"mass": 108,
     	"bandCombo": "#a0/V",
